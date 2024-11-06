@@ -6,3 +6,5 @@ Anggota Kelompok :
 3. MUCHAMMAD ARIEYA CANDRA PANGESTU
 4. MUHAMMAD RAFI RAJENDRA
 5. RIZAL ABRAR FAHMI
+
+<img src="assets\img\polinema.png" alt="Logo Kampus" width="100">
