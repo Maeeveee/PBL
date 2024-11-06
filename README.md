@@ -1,8 +1,7 @@
 <div align="center">
     <img src="assets\img\polinema.png" alt="Logo Kampus" width="100">
-</div>
-
 Repository PBL Kelompok 1
+</div>
 
 Anggota Kelompok :
 1. ABDILLAH AGIL ARBIANSYAH
