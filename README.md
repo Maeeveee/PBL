@@ -11,5 +11,4 @@ Anggota Kelompok :
 4. MUHAMMAD RAFI RAJENDRA
 5. RIZAL ABRAR FAHMI
 
-Rencana Fitur : 
-https://www.figma.com/board/MJuM7EUMCLs2w46VixeLZX/Breakdown-Fitur-Sistatib?node-id=0-1&node-type=canvas&t=WkuayUIV59uQicoz-0 
+Rencana Fitur : https://www.figma.com/board/MJuM7EUMCLs2w46VixeLZX/Breakdown-Fitur-Sistatib?node-id=0-1&t=WkuayUIV59uQicoz-1
