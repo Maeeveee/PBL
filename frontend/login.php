@@ -1,11 +1,17 @@
 <?php
 session_start();
-require_once './backend/config_db.php';
+include '../backend/config_db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $role = strtolower($_POST['role']);
     $username = $_POST['username'];
     $password = $_POST['password'];
+    
+    // Validasi input
+    if (empty($username) || empty($password) || empty($role)) {
+        header("Location: login.php?error=All fields are required");
+        exit();
+    }
     
     try {
         switch ($role) {
@@ -19,13 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt = $conn->prepare("SELECT * FROM Mahasiswa WHERE NIM = :username AND PasswordMahasiswa = :password");
                 break;
             default:
-                header("Location: index.php?error=Invalid role");
+                header("Location: login.php?error=Invalid role");
                 exit();
         }
 
         $stmt->execute([
             ':username' => $username,
-            ':password' => $password
+            ':password' => $password // Idealnya password di-hash
         ]);
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -40,16 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: dashboard.php");
             exit();
         } else {
-            header("Location: index.php?error=Invalid username or password");
+            header("Location: login.php?error=Invalid username or password");
             exit();
         }
     } catch(PDOException $e) {
-        header("Location: index.php?error=Database error");
+        header("Location: login.php?error=Database error: " . urlencode($e->getMessage()));
         exit();
     }
-} else {
-    header("Location: index.php");
-    exit();
 }
 ?>
 
