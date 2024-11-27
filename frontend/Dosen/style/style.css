@@ -1,0 +1,18 @@
+.sidebarColor{
+    background-color: #483D8B;
+}
+
+.bodyColor{
+    background-color: #cbc6eb;
+
+}
+
+.active{
+    background-color: white;
+
+}
+
+.ukuran{
+    width: 20px;
+    height: 20px;
+}
