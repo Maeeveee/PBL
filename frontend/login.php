@@ -63,16 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
     <title>Login</title>
 </head>
 <body>
-        <div class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center sidebarColor">
+        <div class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center" style="background-color: #483D8B;">
             <h1 class="text-white">Polinema Tertib</h1>
-            <div class="bodyColor p-4 rounded" style="max-width: 400px; width: 100%;">
+            <div class="p-4 rounded" style="background-color: #e9e6fd; max-width: 400px; width: 100%;">
                 <form action="index.html" method="post">
                     <div class="text-center">
-                        <img src="img/logoJti.png" alt="" style="width: 70px; height: 70px;">
+                        <img src="img/logoJti.svg" alt="" style="width: 70px; height: 70px;">
                     </div>
                     <input type="text" class="form-control m-2" name="username" id="username" placeholder="Username">
                     <input type="password" class="form-control m-2" name="password" id="password" placeholder="Password">
