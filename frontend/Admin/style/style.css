@@ -9,9 +9,11 @@
 
 .active{
     background-color: white;
-
 }
 
+body{
+    background-color: #483D8B;
+}
 .ukuran{
     width: 20px;
     height: 20px;
