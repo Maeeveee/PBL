@@ -118,3 +118,35 @@ VALUES
 INSERT INTO RiwayatPoin (NIM, Poin, Tanggal, Keterangan)
 VALUES 
 ('2200000001', -5, '2024-12-01', 'Pelanggaran: Tidak memakai kartu identitas');
+
+INSERT INTO Users (Username, Password, Role, Email)
+VALUES 
+('mahasiswa2', 'passwordmhs2', 'Mahasiswa', 'mahasiswa2@email.com'),
+('mahasiswa3', 'passwordmhs3', 'Mahasiswa', 'mahasiswa3@email.com'),
+('dosen2', 'passworddosen2', 'Dosen', 'dosen2@email.com'),
+('dosen3', 'passworddosen3', 'Dosen', 'dosen3@email.com'),
+('admin2', 'passwordadmin2', 'Admin', 'admin2@email.com'),
+('admin3', 'passwordadmin3', 'Admin', 'admin3@email.com');
+
+INSERT INTO Mahasiswa (NIM, Nama, ProgramStudi, Email, NoTelepon, Alamat, TanggalLahir, UserID)
+VALUES 
+('2200000002', 'Mahasiswa 2', 'Sistem Informasi', 'mahasiswa2@email.com', '081345678901', 'Surabaya', '2001-02-02', 4),
+('2200000003', 'Mahasiswa 3', 'Teknik Komputer', 'mahasiswa3@email.com', '081456789012', 'Jakarta', '2000-03-03', 5);
+
+
+INSERT INTO Dosen (NIP, Nama, Email, NoTelepon, Fakultas, UserID)
+VALUES 
+('198012345678901235', 'Dosen 2', 'dosen2@email.com', '081298765433', 'Fakultas Teknik Elektro', 6),
+('198012345678901236', 'Dosen 3', 'dosen3@email.com', '081298765434', 'Fakultas Teknik Sipil', 7);
+
+
+INSERT INTO Admin (NamaAdmin, EmailAdmin, NoTelepon, UserID)
+VALUES 
+('Admin 2', 'admin2@email.com', '081223344557', 8),
+('Admin 3', 'admin3@email.com', '081223344558', 9);
+
+
+INSERT INTO JenisPelanggaran (NamaPelanggaran, Poin)
+VALUES 
+('Tidak membawa buku tugas', 3),
+('Merokok di area kampus', 15);
