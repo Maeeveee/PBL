@@ -78,3 +78,43 @@ CREATE TABLE Session (
     CreatedAt DATETIME DEFAULT GETDATE(),
     ExpiresAt DATETIME
 );
+
+drop table Session;
+
+INSERT INTO Users (Username, Password, Role, Email)
+VALUES 
+('mahasiswa1', 'passwordmhs1', 'Mahasiswa', 'mahasiswa1@email.com'),
+('dosen1', 'passworddosen1', 'Dosen', 'dosen1@email.com'),
+('admin1', 'passwordadmin1', 'Admin', 'admin1@email.com');
+
+INSERT INTO Mahasiswa (NIM, Nama, ProgramStudi, Email, NoTelepon, Alamat, TanggalLahir, UserID)
+VALUES 
+('2200000001', 'Mahasiswa 1', 'Teknik Informatika', 'mahasiswa1@email.com', '081234567890', 'Malang', '2002-01-01', 1);
+
+INSERT INTO Dosen (NIP, Nama, Email, NoTelepon, Fakultas, UserID)
+VALUES 
+('198012345678901234', 'Dosen 1', 'dosen1@email.com', '081298765432', 'Fakultas Teknologi Informasi', 2);
+
+INSERT INTO Admin (NamaAdmin, EmailAdmin, NoTelepon, UserID)
+VALUES 
+('Admin 1', 'admin1@email.com', '081223344556', 3);
+
+INSERT INTO JenisPelanggaran (NamaPelanggaran, Poin)
+VALUES 
+('Tidak memakai kartu identitas', 5),
+('Terlambat masuk kelas', 2),
+('Melanggar kode etik kampus', 10);
+
+
+INSERT INTO Pelanggaran (NIM, NIP, JenisID, TanggalPelanggaran, BuktiFoto, StatusVerifikasi)
+VALUES 
+('2200000001', '198012345678901234', 1, '2024-12-01', 'bukti_foto_1.jpg', 0);
+
+INSERT INTO Tugas (PelanggaranID, Deskripsi, StatusTugas, TanggalSelesai)
+VALUES 
+(1, 'Melakukan permohonan maaf kepada dosen.', 0, NULL);
+
+
+INSERT INTO RiwayatPoin (NIM, Poin, Tanggal, Keterangan)
+VALUES 
+('2200000001', -5, '2024-12-01', 'Pelanggaran: Tidak memakai kartu identitas');
