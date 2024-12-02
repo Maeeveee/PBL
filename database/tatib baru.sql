@@ -150,3 +150,13 @@ INSERT INTO JenisPelanggaran (NamaPelanggaran, Poin)
 VALUES 
 ('Tidak membawa buku tugas', 3),
 ('Merokok di area kampus', 15);
+
+CREATE TABLE Notifikasi (
+    NotifikasiID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NULL, -- ID pengguna yang menerima notifikasi
+    Role VARCHAR(20) NULL, --pengguna (Mahasiswa/Dosen/Admin)
+    Judul VARCHAR(255) NOT NULL,
+    Isi TEXT NOT NULL,
+    TanggalDibuat DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID) 
+);
