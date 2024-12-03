@@ -131,3 +131,10 @@ VALUES
 
 ALTER TABLE Pelanggaran
 ADD Surat VARCHAR(255);
+
+CREATE TABLE Notifikasi (
+    NotifikasiID INT PRIMARY KEY,
+    Judul NVARCHAR(100),
+    Isi NVARCHAR(MAX),
+    Username VARCHAR(50) FOREIGN KEY REFERENCES Users(Username)
+);
