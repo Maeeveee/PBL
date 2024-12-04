@@ -3,54 +3,77 @@ session_start();
 include '../backend/config_db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $role = strtolower($_POST['role']);
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
     
     // Validasi input
-    if (empty($username) || empty($password) || empty($role)) {
-        header("Location: login.php?error=All fields are required");
+    if (empty($username) || empty($password)) {
+        $_SESSION['error'] = "Username dan password harus diisi";
+        header("Location: login.php");
         exit();
     }
-    
+
     try {
-        switch ($role) {
-            case 'admin':
-                $stmt = $conn->prepare("SELECT * FROM Admin WHERE Nama = :username AND PasswordAdmin = :password");
+        // Array untuk menyimpan query pencarian role
+        $roleQueries = [
+            'Admin' => "SELECT 'admin' AS role, AdminID AS user_id, * FROM Admin WHERE Nama = :username",
+            'Dosen' => "SELECT 'dosen' AS role, DosenID AS user_id, * FROM Dosen WHERE NIP = :username",
+            'Mahasiswa' => "SELECT 'mahasiswa' AS role, MahasiswaID AS user_id, * FROM Mahasiswa WHERE NIM = :username"
+        ];
+
+        $user = null;
+        $detectedRole = null;
+
+        // Coba temukan user di setiap tabel
+        foreach ($roleQueries as $tableName => $query) {
+            $stmt = $conn->prepare($query);
+            $stmt->execute([':username' => $username]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                $user = $result;
+                $detectedRole = $result['role'];
                 break;
-            case 'dosen':
-                $stmt = $conn->prepare("SELECT * FROM Dosen WHERE NIP = :username AND PasswordDosen = :password");
-                break;
-            case 'mahasiswa':
-                $stmt = $conn->prepare("SELECT * FROM Mahasiswa WHERE NIM = :username AND PasswordMahasiswa = :password");
-                break;
-            default:
-                header("Location: login.php?error=Invalid role");
-                exit();
+            }
         }
 
-        $stmt->execute([
-            ':username' => $username,
-            ':password' => $password // Idealnya password di-hash
-        ]);
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        // Periksa apakah user ditemukan dan password cocok
         if ($user) {
-            // Set session variables
-            $_SESSION['user_id'] = $user[$role.'ID'];
-            $_SESSION['role'] = $role;
-            $_SESSION['nama'] = $user['Nama'];
+            // Sesuaikan kolom password berdasarkan role
+            $passwordColumn = 'Password' . ucfirst($detectedRole);
             
-            // Redirect to dashboard
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            header("Location: login.php?error=Invalid username or password");
-            exit();
+            if ($password === $user[$passwordColumn]) {
+                // Set session
+                $_SESSION['user_id'] = $user['user_id'];
+                $_SESSION['role'] = $detectedRole;
+                $_SESSION['nama'] = $user['Nama'];
+                
+                // Redirect berdasarkan role
+                switch ($detectedRole) {
+                    case 'admin':
+                        $redirect = '../Admin/Dashboard.html';
+                        break;
+                    case 'dosen':
+                        $redirect = '../Dosen/Dashboard.html';
+                        break;
+                    case 'mahasiswa':
+                        $redirect = '../Mahasiswa/Dashboard.html';
+                        break;
+                }
+
+                header("Location: " . $redirect);
+                exit();
+            }
         }
+
+        // Jika user tidak ditemukan atau password salah
+        $_SESSION['error'] = "Username atau password salah";
+        header("Location: login.php");
+        exit();
+
     } catch(PDOException $e) {
-        header("Location: login.php?error=Database error: " . urlencode($e->getMessage()));
+        $_SESSION['error'] = "Kesalahan basis data: " . $e->getMessage();
+        header("Location: login.php");
         exit();
     }
 }
