@@ -1,3 +1,14 @@
+<?php
+session_start();
+require_once '../backend/config_db.php';
+
+// Pastikan user sudah login
+if (!isset($_SESSION['admin_logged_in'])) {
+    header('Location: ../frontend/login.php');
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

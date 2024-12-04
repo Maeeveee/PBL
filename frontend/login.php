@@ -3,52 +3,61 @@ session_start();
 include '../backend/config_db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $role = strtolower($_POST['role']);
     $username = trim($_POST['username']);
     $password = $_POST['password'];
-    
+
     // Validasi input
-    if (empty($username) || empty($password) || empty($role)) {
+    if (empty($username) || empty($password)) {
         $_SESSION['error'] = "All fields are required";
         header("Location: login.php");
         exit();
     }
 
-    // Validasi role
-    $allowed_roles = ['admin', 'dosen', 'mahasiswa'];
-    if (!in_array($role, $allowed_roles)) {
-        $_SESSION['error'] = "Invalid role";
-        header("Location: login.php");
-        exit();
-    }
-    
     try {
-        // Query login berdasarkan role
-        $queries = [
-            'admin' => "SELECT * FROM Admin WHERE Nama = :username",
-            'dosen' => "SELECT * FROM Dosen WHERE NIP = :username",
-            'mahasiswa' => "SELECT * FROM Mahasiswa WHERE NIM = :username"
-        ];
+        // LANGKAH 1: Update Password di Database Menjadi Hash
+        $stmt = $conn->query("SELECT Username, Password FROM Users");
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $conn->prepare($queries[$role]);
+        foreach ($users as $user) {
+            // Cek apakah password sudah di-hash
+            if (strlen($user['Password']) < 60) { // Panjang hash biasanya >=60 karakter
+                $hashedPassword = password_hash($user['Password'], PASSWORD_DEFAULT);
+                $updateStmt = $conn->prepare("UPDATE Users SET Password = :password WHERE Username = :username");
+                $updateStmt->execute([':password' => $hashedPassword, ':username' => $user['Username']]);
+            }
+        }
+
+        // LANGKAH 2: Login dengan Validasi Hash
+        $query = "SELECT * FROM Users WHERE Username = :username";
+        $stmt = $conn->prepare($query);
         $stmt->execute([':username' => $username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($password, $user["Password" . ucfirst($role)])) {
+        // Debugging: Output role yang diterima
+        echo 'Role: ' . $user['Role']; // Menampilkan nilai role yang didapat
+
+        // Cek keberadaan user dan verifikasi password
+        if ($user && password_verify($password, $user['Password'])) {
             // Set session variables
             session_regenerate_id(true);
-            $_SESSION['user_id'] = $user[$role . 'ID'];
-            $_SESSION['role'] = $role;
-            $_SESSION['nama'] = $user['Nama'];
-            
-            // Redirect ke dashboard
+            $_SESSION['username'] = $user['Username'];
+            $_SESSION['role'] = $user['Role'];
+
+            // Redirect berdasarkan role
             $redirects = [
-                'admin' => '../Admin/Dashboard.html',
-                'dosen' => '../Dosen/Dashboard.html',
-                'mahasiswa' => '../Mahasiswa/Dashboard.html'
+                'Admin' => '../Admin/Dashboard.html',
+                'Dosen' => '../Dosen/Dashboard.html',
+                'Mahasiswa' => '../Mahasiswa/Dashboard.html'
             ];
-            header("Location: " . $redirects[$role]);
-            exit();
+
+            if (array_key_exists($user['Role'], $redirects)) {
+                header("Location: " . $redirects[$user['Role']]);
+                exit();
+            } else {
+                $_SESSION['error'] = "Role not recognized";
+                header("Location: login.php");
+                exit();
+            }
         } else {
             $_SESSION['error'] = "Invalid username or password";
             header("Location: login.php");

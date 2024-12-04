@@ -1,3 +1,13 @@
+<?php
+session_start();
+require_once '../backend/config/db.php';
+
+// Pastikan user sudah login
+if (!isset($_SESSION['mahasiswa_logged_in'])) {
+    header('Location: ../frontend/login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,11 +21,11 @@
     <title>PolinemaTertib</title>
 </head>
 
-<body style="background-color: #483D8B;">
+<body>
     <div class="container-fluid">
         <div class="row flex-nowrap">
 
-            <!-- Sidebar-->
+            <!-- Sidebar -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebarColor">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
                     <div class="d-flex align-items-center mb-3">
@@ -95,30 +105,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 style="color: #483D8B"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Dosen</h5>
-                        <p>Dosen</p>
-                    </div>
-                </div>
-
-                <!-- Tampil  Jumlah Dosen & Mahasiswa -->
-                <div class="bg-white p-3 rounded" style="width: 700px; margin: 0 auto;">
-                    <div class="d-flex justify-content-center gap-5">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/reading.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
-                            <div class="d-flex flex-column ms-3">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Mahasiswa</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/teacher.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
-                            <div class="d-flex flex-column ms-3 ">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Dosen</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
-                            </div>
-                        </div>
+                        <h5>Nama Mahasiswa</h5>
+                        <p>Mahasiswa</p>
                     </div>
                 </div>
 
@@ -222,13 +210,13 @@
                     </div>
                 </div>
 
-                <!-- Leaderboard Pelanggar -->
+                <!-- Tampilkan Riwayat Pelanggaran -->
                 <div class="bg-white p-3 rounded" style="width: 1200px; margin: 0 auto; color: #483D8B;">
-                    <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
-                    <div id="leaderboard"></div>
+                    <h4 style="color: #483D8B;"><strong>Riwayat Pelanggaran</strong></h4>
+                    <div id="Riwayat"></div>
                     <script>
                         for (let index = 0; index < 5; index++) {
-                            let tampilLeaderboard = `
+                            let Riwayat = `
                             <div class="p-3 d-flex justify-content-between">
                         <div class="d-flex justify-content-center gap-5">
                             <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
@@ -247,7 +235,7 @@
                         <a href="Formulir.html" class="btn" style="color: #483D8B;">Print</a>
                         </div>
                             `;
-                            document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
+                            document.getElementById("Riwayat").innerHTML += Riwayat;
                         }
                     </script>
                 </div>
@@ -255,4 +243,5 @@
         </div>
     </div>
 </body>
+
 </html>
