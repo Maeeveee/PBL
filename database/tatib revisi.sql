@@ -138,3 +138,13 @@ CREATE TABLE Notifikasi (
     Isi NVARCHAR(MAX),
     Username VARCHAR(50) FOREIGN KEY REFERENCES Users(Username)
 );
+
+ALTER TABLE Pelanggaran
+ADD Status VARCHAR(20) DEFAULT 'Pending';
+
+ALTER TABLE Pelanggaran
+ADD AdminID INT;
+
+ALTER TABLE Pelanggaran
+ADD CONSTRAINT FK_Pelanggaran_Admin
+FOREIGN KEY (AdminID) REFERENCES Admin(AdminID);
