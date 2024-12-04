@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once '../backend/config_db.php';
+include '../backend/config_db.php';
+include '../backend/function.php';
 
 // Pastikan user sudah login
 if (!isset($_SESSION['admin_logged_in'])) {
@@ -115,7 +116,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 style="color: #483D8B"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin_info['nama'] ?? 'Admin'); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
@@ -128,7 +129,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                                 style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-0" style="color: #483D8B;"><strong>Mahasiswa</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
+                                <h5 style="color: #483D8B;"><?php echo $total_mahasiswa; ?></h5>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
@@ -136,7 +137,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                                 style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
                             <div class="d-flex flex-column ms-3 ">
                                 <h4 class="mb-0" style="color: #483D8B;"><strong>Dosen</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
+                                <h5 style="color: #483D8B;"><?php echo $total_dosen; ?></h5>
                             </div>
                         </div>
                     </div>
@@ -246,30 +247,28 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <div class="bg-white p-3 rounded" style="width: 1200px; margin: 0 auto; color: #483D8B;">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
                     <div id="leaderboard"></div>
-                    <script>
-                        for (let index = 0; index < 5; index++) {
-                            let tampilLeaderboard = `
+                    <?php foreach($top_pelanggar as $index => $pelanggar): ?>
                             <div class="p-3 d-flex justify-content-between">
-                        <div class="d-flex justify-content-center gap-5">
-                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
-                            <p style="color: #483D8B;"><strong>Rizal Abrar Fahmi</strong></p>
-                        </div>
-                        <p>Tempat nim</p>
-                        <div class="d-flex gap-2">
-                            <div class="d-flex">
-                                <p>
-                                    kelas <br>
-                                    TI 2F
-                                </p>
+                                <div class="d-flex justify-content-center gap-5">
+                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
+                                    <p style="color: #483D8B;">
+                                        <strong><?php echo htmlspecialchars($pelanggar['nama']); ?></strong>
+                                    </p>
+                                </div>
+                                <p><?php echo htmlspecialchars($pelanggar['nim']); ?></p>
+                                <div class="d-flex gap-2">
+                                    <div class="d-flex">
+                                        <p>
+                                            Kelas<br>
+                                            <?php echo htmlspecialchars($pelanggar['kelas']); ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <p><strong><?php echo htmlspecialchars($pelanggar['tingkat_pelanggaran']); ?></strong></p>   
+                                <a href="formSanksi.php?nim=<?php echo $pelanggar['nim']; ?>" class="btn" style="color: #483D8B;">Print</a>
                             </div>
-                        </div>
-                        <p><Strong>I</Strong></p>   
-                        <a href="formSanksi.html" class="btn" style="color: #483D8B;">Print</a>
-                        </div>
-                            `;
-                            document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
-                        }
-                    </script>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
         </div>
