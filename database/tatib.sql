@@ -152,3 +152,18 @@ CREATE TABLE PolinemaToday (
     AdminID INT,
     FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
 );
+
+CREATE TRIGGER SetAdminID
+ON PolinemaToday
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @AdminID INT;
+    -- Dapatkan AdminID berdasarkan sesi atau pengguna yang sedang login
+    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
+
+    -- Masukkan data dengan AdminID yang terisi otomatis
+    INSERT INTO PolinemaToday (Judul, Isi, TglDibuat, Thumbnail, AdminID)
+    SELECT Judul, Isi, TglDibuat, Thumbnail, @AdminID
+    FROM INSERTED;
+END;
