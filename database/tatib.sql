@@ -188,7 +188,7 @@ BEGIN
     IF @Status = 'Selesai'
     BEGIN
         -- Mengirim notifikasi dengan AdminID yang sesuai
-        INSERT INTO Notifikasi (Judul, Isi, Username, AdminID)
+        INSERT INTO Notifikasi (Judul, Isi, UserID, AdminID)
         VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
     END;
 END;
