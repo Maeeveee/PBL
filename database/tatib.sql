@@ -192,3 +192,8 @@ BEGIN
         VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
     END;
 END;
+
+ALTER TABLE Mahasiswa
+ADD TugasID INT NULL,
+    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
+
