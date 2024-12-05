@@ -86,9 +86,9 @@ CREATE TABLE Notifikasi (
     NotifikasiID INT PRIMARY KEY,
     Judul NVARCHAR(100),
     Isi NVARCHAR(255),
-	Username VARCHAR(50),
+	UsersID INT,
 	AdminID int,
-    FOREIGN KEY (Username) REFERENCES Users(Username),
+    FOREIGN KEY (UsersID) REFERENCES Users(UsersID),
 	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
 );
 
@@ -166,4 +166,29 @@ BEGIN
     INSERT INTO PolinemaToday (Judul, Isi, TglDibuat, Thumbnail, AdminID)
     SELECT Judul, Isi, TglDibuat, Thumbnail, @AdminID
     FROM INSERTED;
+END;
+
+CREATE TRIGGER after_update_pelanggaran_status
+ON Pelanggaran
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @Status VARCHAR(20);
+    DECLARE @PelanggaranID INT;
+    DECLARE @AdminID INT;
+
+    -- Ambil status dan pelanggaran ID dari baris yang baru diupdate
+    SELECT @Status = Status, @PelanggaranID = PelanggaranID
+    FROM INSERTED;
+
+    -- Ambil AdminID yang melakukan update dari Users
+    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
+
+    -- Jika status diubah menjadi 'Selesai', lakukan tindakan tambahan
+    IF @Status = 'Selesai'
+    BEGIN
+        -- Mengirim notifikasi dengan AdminID yang sesuai
+        INSERT INTO Notifikasi (Judul, Isi, Username, AdminID)
+        VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
+    END;
 END;
