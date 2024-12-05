@@ -47,7 +47,7 @@ CREATE TABLE Users (
 CREATE TABLE JenisPelanggaran (
     JenisID INT PRIMARY KEY IDENTITY(1,1),
     NamaPelanggaran VARCHAR(100),
-    Tingkat CHAR(2)
+    Tingkat CHAR(3)
 );
 
 CREATE TABLE Pelanggaran (
