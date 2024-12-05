@@ -197,3 +197,33 @@ ALTER TABLE Mahasiswa
 ADD TugasID INT NULL,
     FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
 
+--- RUNNING INI YAA TEMAN-TEMAN
+
+ALTER TABLE Tugas
+DROP CONSTRAINT FK__Tugas__NIM__5629CD9C; -- Sesuaikan dengan nama constraint yang ditemukan
+
+ALTER TABLE Tugas
+DROP COLUMN NIM;
+
+ALTER TABLE Tugas
+ADD PelanggaranID INT;
+
+ALTER TABLE Pelanggaran
+ADD TugasID INT NULL;
+
+-- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
+CREATE PROCEDURE GetTopMahasiswaPelanggar
+    @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
+AS
+BEGIN
+    SELECT TOP (@TopN)
+        M.NIM,
+        M.Nama,
+        COUNT(P.PelanggaranID) AS JumlahPelanggaran
+    FROM Mahasiswa M
+    LEFT JOIN Pelanggaran P ON M.NIM = P.NIM
+    GROUP BY M.NIM, M.Nama
+    ORDER BY COUNT(P.PelanggaranID) DESC;
+END;
+
+EXEC GetTopMahasiswaPelanggar @TopN = 5;
