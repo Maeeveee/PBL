@@ -33,7 +33,8 @@ CREATE TABLE ProgramStudi (
 );
 
 CREATE TABLE Users (
-    Username VARCHAR(50) PRIMARY KEY NOT NULL,
+	UsersID int PRIMARY KEY,
+    Username VARCHAR(50),
 	Password VARCHAR(255) NOT NULL,
     Role VARCHAR(20) CHECK (Role IN ('Mahasiswa', 'Dosen', 'Admin')) NOT NULL,
 	NIM CHAR(12),
@@ -91,6 +92,22 @@ CREATE TABLE Notifikasi (
 	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
 );
 
+CREATE TRIGGER before_insert_users
+ON Users
+AFTER INSERT
+AS
+BEGIN
+    -- Update the Username field based on the Role
+    UPDATE U
+    SET U.Username = CASE 
+        WHEN I.Role = 'Mahasiswa' THEN I.NIM
+        WHEN I.Role = 'Dosen' THEN I.NIDN
+        WHEN I.Role = 'Admin' THEN CAST(I.AdminID AS VARCHAR)  -- Ensure AdminID is cast to VARCHAR
+    END
+    FROM Users U
+    INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
+END;
+
 INSERT INTO ProgramStudi (ProdiID, Prodi) VALUES
 (1, 'D-IV Teknik Informatika'),
 (2, 'D-IV Sistem Informasi Bisnis'),
@@ -111,14 +128,14 @@ INSERT INTO Admin (AdminID, NamaAdmin, EmailAdmin, NoTelepon) VALUES
 (6789, 'Admin B', 'adminb@university.com', '083456789001');
 
 INSERT INTO Users (Username, Password, Role, NIM, NIDN, AdminID) VALUES
-('ahmadrizky', 'password123', 'Mahasiswa', '210123456789', NULL, NULL),  
-('budisantoso', 'password123', 'Mahasiswa', '210123456790', NULL, NULL),
-('citradewi', 'password123', 'Mahasiswa', '210123456791', NULL, NULL),  
-('john_doe', 'password123', 'Dosen', NULL, '1234567890', NULL), 
-('jane_smith', 'password123', 'Dosen', NULL, '1234567891', NULL), 
-('mark_brown', 'password123', 'Dosen', NULL, '1234567892', NULL),  
-('admina', 'adminpass', 'Admin', NULL, NULL, 1234), 
-('adminb', 'adminpass', 'Admin', NULL, NULL, 6789);
+(NULL, 'password123', 'Mahasiswa', '210123456789', NULL, NULL),  
+(NULL, 'password123', 'Mahasiswa', '210123456790', NULL, NULL),
+(NULL, 'password123', 'Mahasiswa', '210123456791', NULL, NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567890', NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567891', NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567892', NULL),  
+(NULL, 'adminpass', 'Admin', NULL, NULL, 1234), 
+(NULL, 'adminpass', 'Admin', NULL, NULL, 6789);
 
 INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
 ('Pelanggaran Ringan', 'I'),
