@@ -142,3 +142,13 @@ INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
 ('Pelanggaran Berat', 'III'),
 ('Pelanggaran Sangat Berat', 'IV'),
 ('Pelanggaran Fatal', 'V');
+
+CREATE TABLE PolinemaToday (
+    BeritaID INT PRIMARY KEY IDENTITY(1,1),
+    Judul VARCHAR(255) NOT NULL,
+    Isi TEXT NOT NULL,
+    TglDibuat DATETIME NOT NULL,
+    Thumbnail VARCHAR(255),
+    AdminID INT,
+    FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
+);
