@@ -1,3 +1,24 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+// user login sebagai admin
+if(!isset($_SESSION['username'])){
+    header('Location: ./login.php');
+    exit();
+}
+
+// info dari admin
+$stmt = $conn->prepare("SELECT a.AdminID, a.NamaAdmin, a.EmailAdmin, a.NoTelepon, u.Username, u.Role 
+                       FROM Admin a
+                       JOIN Users u ON a.UserID = u.Username
+                       WHERE u.Username = :username");
+$stmt->execute(['username' => $_SESSION['username']]);
+$admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,7 +102,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Profile</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
@@ -91,14 +112,14 @@
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
                     <div class=" d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
-                            <h5>Rizal Abrar</h5>
+                            <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                             <p>Admin</p>
                         </div>
                         <div>
-                            <p class="purple-text">HP: 08123456789</p>
+                            <p class="purple-text"><?php echo htmlspecialchars($admin['NoTelepon']); ?></p>
                         </div>
                         <div>
-                            <p class="purple-text">Email: 7AqgB@example.com</p>
+                            <p class="purple-text"><?php echo htmlspecialchars($admin['EmailAdmin']); ?></p>
                         </div>
                     </div>
                 </div>
