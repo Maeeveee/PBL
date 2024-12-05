@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Redirect berdasarkan role
             $redirects = [
-                'Admin' => '../Admin/Dashboard.php',
-                'Dosen' => '../Dosen/Dashboard.php',
-                'Mahasiswa' => '../Mahasiswa/Dashboard.php'
+                'Admin' => 'Admin/Dashboard.html',
+                'Dosen' => 'Dosen/Dashboard.html',
+                'Mahasiswa' => 'Mahasiswa/Dashboard.html'
             ];
 
             if (array_key_exists($user['Role'], $redirects)) {
