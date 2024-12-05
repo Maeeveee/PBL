@@ -26,33 +26,25 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dashboard.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
+                            <a href="Dashboard.php" class="nav-link align-middle" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                            onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
+                                style="filter:invert(100%); width: 25px; height: 25px;">
+
                                 <span class="ms-1 d-none d-sm-inline text-white"><Strong>Beranda</Strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="#" class="nav-link align-middle hover-nav bg-white">
-                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="nav-icon me-2"
-                                    style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline"
-                                    style="color: #483D8B;"><strong>Mahasiswa</strong></span>
-                            </a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dosen.html" class="nav-link align-middle"
+                            <a href="Formulir.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Dosen</strong></span>
+                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
+                            <a href="PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -61,7 +53,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.html" class="nav-link align-middle"
+                            <a href="Pelanggaran.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
@@ -70,7 +62,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
+                            <a href="Profile.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
@@ -79,12 +71,11 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
+                            <a href="Notifikasi.php" class="nav-link align-middle bg-white">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Notifikasi</strong></span>
+                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 25px; height: 25px;">
+
+                                <span class="ms-1 d-none d-sm-inline " style="color: #483D8B;"><strong>Notifikasi</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
@@ -100,53 +91,36 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col py-3" style="background-color: #e9e6fd;">
+            <div class="col py-3 min-vh-100" style="background-color: #e9e6fd;">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 style="color: #483D8B"><strong>Mahasiswa</strong></h1>
+                    <h1 style="color: #483D8B"><strong>Notifikasi</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Admin</h5>
-                        <p>Admin</p>
+                        <h5>Nama Dosen</h5>
+                        <p>Dosen</p>
                     </div>
                 </div>
-
-                <!-- Form cari -->
-                <div class="p-3">
-                    <input type="text" placeholder="Cari.." class=" form-control" style="width: 25%;">
-                </div>
-
-                <!-- Tampil Mahasiswa -->
-                <div class="p-3">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th style="color: #483D8B;">Nama</th>
-                                <th style="color: #483D8B;">NIM</th>
-                                <th style="color: #483D8B;">Tanggal Lahir</th>
-                                <th style="color: #483D8B;">Nama Wali</th>
-                                <th style="color: #483D8B;">Kota Asal</th>
-                                <th style="color: #483D8B;">Kontak</th>
-                                <th style="color: #483D8B;">Kelas</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body" style="line-height: 2.5;">
-                            <script>
-                                for (let index = 0; index < 15; index++) {
-                                    let tableData = `<tr class="align-middle">
-                                        <td>Rizal</td>
-                                        <td>12345678</td>
-                                        <td>01-01-2000</td>
-                                        <td>King</td>
-                                        <td>Surabaya</td>
-                                        <td>08123456789</td>
-                                        <td>TI-2F</td>
-                                    </tr>`;
-                                    document.getElementById("table-body").innerHTML += tableData;
-                                }
-                            </script>
-                        </tbody>
-                    </table>
+                
+                <div class="p-3 bg-white rounded">
+                    
+                    <!-- Periode notifikasi -->
+                    <div class="p-3">
+                        <h5 style="color: #483D8B;">Hari ini</h5>
+                        <ul>
+                            <li><p style="color: #483D8B;"> Sabtu, 30 november 2024</p>
+                                <ul>
+                                    <li>
+                                        <p  style="color: #483D8B;"><strong>mengunggah pelanggaran baru</strong></p>
+                                    </li>
+                                    <li>
+                                        <p  style="color: #483D8B;"><strong>mengunggah bukti pelanggaran baru</strong></p>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </body>

@@ -34,25 +34,16 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Mahasiswa.html" class="nav-link align-middle hover-nav"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Mahasiswa</strong></span>
-                            </a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dosen.html" class="nav-link align-middle"
+                            <a href="Formulir.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Dosen</strong></span>
+                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
+                            <a href="PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -61,7 +52,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.html" class="nav-link align-middle"
+                            <a href="Pelanggaran.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
@@ -70,7 +61,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
+                            <a href="Profile.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
@@ -79,7 +70,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
+                            <a href="Notifikasi.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
@@ -104,8 +95,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 style="color: #483D8B"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Admin</h5>
-                        <p>Admin</p>
+                        <h5>Nama Dosen</h5>
+                        <p>Dosen</p>
                     </div>
                 </div>
 
@@ -253,7 +244,7 @@
                             </div>
                         </div>
                         <p><Strong>I</Strong></p>   
-                        <a href="formSanksi.html" class="btn" style="color: #483D8B;">Print</a>
+                        <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
                         </div>
                             `;
                             document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
