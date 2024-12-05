@@ -97,12 +97,11 @@ ON Users
 AFTER INSERT
 AS
 BEGIN
-    -- Update the Username field based on the Role
     UPDATE U
     SET U.Username = CASE 
         WHEN I.Role = 'Mahasiswa' THEN I.NIM
         WHEN I.Role = 'Dosen' THEN I.NIDN
-        WHEN I.Role = 'Admin' THEN CAST(I.AdminID AS VARCHAR)  -- Ensure AdminID is cast to VARCHAR
+        WHEN I.Role = 'Admin' THEN CAST(I.AdminID AS VARCHAR)
     END
     FROM Users U
     INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
