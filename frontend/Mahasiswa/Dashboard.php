@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,11 +11,11 @@
     <title>PolinemaTertib</title>
 </head>
 
-<body style="background-color: #483D8B;">
+<body>
     <div class="container-fluid">
         <div class="row flex-nowrap">
 
-            <!-- Sidebar-->
+            <!-- Sidebar -->
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebarColor">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
                     <div class="d-flex align-items-center mb-3">
@@ -35,25 +34,16 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Mahasiswa.html" class="nav-link align-middle hover-nav"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Mahasiswa</strong></span>
-                            </a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dosen.html" class="nav-link align-middle"
+                            <a href="Formulir.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Dosen</strong></span>
+                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
+                            <a href="PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -62,7 +52,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.html" class="nav-link align-middle"
+                            <a href="Pelanggaran.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
@@ -71,7 +61,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
+                            <a href="Profile.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
@@ -80,7 +70,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
+                            <a href="Notifikasi.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
@@ -105,30 +95,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 style="color: #483D8B"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5><?php echo htmlspecialchars($admin_info['nama'] ?? 'Admin'); ?></h5>
-                        <p>Admin</p>
-                    </div>
-                </div>
-
-                <!-- Tampil  Jumlah Dosen & Mahasiswa -->
-                <div class="bg-white p-3 rounded" style="width: 700px; margin: 0 auto;">
-                    <div class="d-flex justify-content-center gap-5">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/reading.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
-                            <div class="d-flex flex-column ms-3">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Mahasiswa</strong></h4>
-                                <h5 style="color: #483D8B;"><?php echo $total_mahasiswa; ?></h5>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/teacher.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
-                            <div class="d-flex flex-column ms-3 ">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Dosen</strong></h4>
-                                <h5 style="color: #483D8B;"><?php echo $total_dosen; ?></h5>
-                            </div>
-                        </div>
+                        <h5>Nama Mahasiswa</h5>
+                        <p>Mahasiswa</p>
                     </div>
                 </div>
 
@@ -232,35 +200,38 @@
                     </div>
                 </div>
 
-                <!-- Leaderboard Pelanggar -->
+                <!-- Tampilkan Riwayat Pelanggaran -->
                 <div class="bg-white p-3 rounded" style="width: 1200px; margin: 0 auto; color: #483D8B;">
-                    <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
-                    <div id="leaderboard"></div>
-                    <?php foreach($top_pelanggar as $index => $pelanggar): ?>
+                    <h4 style="color: #483D8B;"><strong>Riwayat Pelanggaran</strong></h4>
+                    <div id="Riwayat"></div>
+                    <script>
+                        for (let index = 0; index < 5; index++) {
+                            let Riwayat = `
                             <div class="p-3 d-flex justify-content-between">
-                                <div class="d-flex justify-content-center gap-5">
-                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
-                                    <p style="color: #483D8B;">
-                                        <strong><?php echo htmlspecialchars($pelanggar['nama']); ?></strong>
-                                    </p>
-                                </div>
-                                <p><?php echo htmlspecialchars($pelanggar['nim']); ?></p>
-                                <div class="d-flex gap-2">
-                                    <div class="d-flex">
-                                        <p>
-                                            Kelas<br>
-                                            <?php echo htmlspecialchars($pelanggar['kelas']); ?>
-                                        </p>
-                                    </div>
-                                </div>
-                                <p><strong><?php echo htmlspecialchars($pelanggar['tingkat_pelanggaran']); ?></strong></p>   
-                                <a href="formSanksi.php?nim=<?php echo $pelanggar['nim']; ?>" class="btn" style="color: #483D8B;">Print</a>
+                        <div class="d-flex justify-content-center gap-5">
+                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
+                            <p style="color: #483D8B;"><strong>Rizal Abrar Fahmi</strong></p>
+                        </div>
+                        <p>Tempat nim</p>
+                        <div class="d-flex gap-2">
+                            <div class="d-flex">
+                                <p>
+                                    kelas <br>
+                                    TI 2F
+                                </p>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                        <p><Strong>I</Strong></p>   
+                        <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
+                        </div>
+                            `;
+                            document.getElementById("Riwayat").innerHTML += Riwayat;
+                        }
+                    </script>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

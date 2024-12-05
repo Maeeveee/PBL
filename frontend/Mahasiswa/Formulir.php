@@ -26,7 +26,7 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dashboard.html" class="nav-link align-middle" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                            <a href="Dashboard.php" class="nav-link align-middle" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                             onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
                                 style="filter:invert(100%); width: 25px; height: 25px;">
@@ -41,7 +41,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
+                            <a href="PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -50,7 +50,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.html" class="nav-link align-middle"
+                            <a href="Pelanggaran.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
+                            <a href="Profile.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
+                            <a href="Notifikasi.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"

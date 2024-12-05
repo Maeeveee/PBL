@@ -28,7 +28,7 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Mahasiswa/Dashboard.html" class="nav-link align-middle"
+                            <a href="/myWeb/PBL/frontend/Mahasiswa/Dashboard.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
@@ -37,7 +37,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Mahasiswa/Formulir.html" class="nav-link align-middle"
+                            <a href="/myWeb/PBL/frontend/Mahasiswa/Formulir.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
@@ -46,7 +46,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Mahasiswa/PolinemaToday.html" class="nav-link align-middle"
+                            <a href="/myWeb/PBL/frontend/Mahasiswa/PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Mahasiswa/Pelanggaran.html" class="nav-link align-middle"
+                            <a href="/myWeb/PBL/frontend/Mahasiswa/Pelanggaran.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
@@ -72,7 +72,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Mahasiswa/Notifikasi.html" class="nav-link align-middle"
+                            <a href="/myWeb/PBL/frontend/Mahasiswa/Notifikasi.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"

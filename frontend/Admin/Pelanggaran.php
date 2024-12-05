@@ -6,89 +6,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
-    <script src="script/script.js"></script>
+    <link rel="stylesheet" href="/myWeb/PBL/frontend/style/style.css">
+    <script src="/myWeb/PBL/frontend/js/button.js"></script>
     <title>PolinemaTertib</title>
 </head>
 
-<body style="background-color: #483D8B;">
+<body>
     <div class="container-fluid">
-        <div class="row flex-nowrap">
+        <div class="row">
 
-            <!-- Sidebar -->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebarColor">
-                <div
-                    class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="me-2"
-                            style="width: 60px; height: 60px;">
-                        <h1 class="fs-4 text-white m-0 d-none d-sm-inline">Polinema<br>Tertib</h1>
+            <!-- Sidebar-->
+            <div class="sidebar">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="img-sidebar">
+                        <h1 class="fs-5 ms-2 d-none d-sm-inline title-sidebar mid-pixel-hide">Polinema<br>Tertib</h1>
                     </div>
 
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                        id="menu">
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dashboard.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-
-                                <span class="ms-1 d-none d-sm-inline text-white"><Strong>Beranda</Strong></span>
+                    <!-- Menu Sidebar -->
+                    <ul class="nav nav-pills flex-column mb-auto align-items-center align-items-sm-start">
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Dashboard.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><Strong>Beranda</Strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Formulir.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Mahasiswa.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Mahasiswa</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>PolinemaToday</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Dosen.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Dosen</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.html" class="nav-link align-middle bg-white">
-                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
-                                    style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 25px; height: 25px;">
-
-                                <span class="ms-1 d-none d-sm-inline" style="color: #483D8B;"><strong>Pelanggaran</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="PolinemaToday.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>PolinemaToday</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"
-                                    ><strong>Profile</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="#" class="align-middle bg-white">
+                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="img-purple">
+                                <span class="ms-1 d-none d-sm-inline purple-text"><strong>Pelanggaran</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Notifikasi</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Profile.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Profile</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Login.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/logout.png" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Logout</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Notifikasi.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Notifikasi</strong></span>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="/myWeb/PBL/frontend/Login.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/logout.png" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Logout</strong></span>
                             </a>
                         </li>
                     </ul>
@@ -96,20 +78,21 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col py-3 min-vh-100" style="background-color: #e9e6fd;" id="kodeEtik">
+            <div class="col-12 offset-md-3 offset-xl-2 main-content" id="kodeEtik">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 style="color: #483D8B"><strong>Kode Etik Mahasiswa</strong></h1>
-                    <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Dosen</h5>
-                        <p>Dosen</p>
+                    <h1 class="purple-text title-font"><strong>Kode Etik Mahasiswa</strong></h1>
+                    <div class="d-flex flex-column purple-text">
+                        <h5>Nama Admin</h5>
+                        <p>Admin</p>
                     </div>
                 </div>
 
                 <!-- isi -->
-                <div class="col-md-8">
+                <div class="col-md-8 content-placeholder">
+
                     <!-- kode Etik -->
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-white" style="background-color: #483D8B;">
+                        <div class="card-header text-white purple-card-header">
                             <h5 class="mb-0">Etika Berkomunikasi Secara Langsung dengan Dosen</h5>
                         </div>
                         <div class="card-body">
@@ -126,7 +109,7 @@
                         </div>
                     </div>
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-white" style="background-color: #483D8B;">
+                        <div class="card-header text-white purple-card-header">
                             <h5 class="mb-0">Etika Mengirim Pesan Kepada Dosen</h5>
                         </div>
                         <div class="card-body">
@@ -141,7 +124,7 @@
                         </div>
                     </div>
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-white" style="background-color: #483D8B;">
+                        <div class="card-header text-white purple-card-header">
                             <h5 class="mb-0">Etika Berpakaian Mahasiswa Laki-laki</h5>
                         </div>
                         <div class="card-body">
@@ -154,7 +137,7 @@
                         </div>
                     </div>
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-white" style="background-color: #483D8B;">
+                        <div class="card-header text-white  purple-card-header">
                             <h5 class="mb-0">Etika Berpakaian Mahasiswa Perempuan</h5>
                         </div>
                         <div class="card-body">
@@ -168,7 +151,7 @@
                         </div>
                     </div>
                     <div class="card mb-4 shadow-sm">
-                        <div class="card-header text-white" style="background-color: #483D8B;">
+                        <div class="card-header text-white  purple-card-header">
                             <h5 class="mb-0">Etika di Dalam Kelas</h5>
                         </div>
                         <div class="card-body">
@@ -188,23 +171,23 @@
                             </ul>
                         </div>
                     </div>
-                    <button onclick="showKlasifikasi()" class="btn text-white"
-                        style="background-color: #483D8B;">Selanjutnya</button>
-                        <a href="Formulir.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
+                    <button onclick="showKlasifikasi()" class="btn text-white purple-card-header">Selanjutnya</button>
+                        <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
                 </div>
             </div>
             
             <!-- Klasifikasi -->
-            <div class="col py-3 min-vh-100" style="background-color: #e9e6fd; display: none;" id="klasifikasi">
+            <div class="col-12 offset-md-3 offset-xl-2 main-content" style="display: none; !important" id="klasifikasi">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 style="color: #483D8B"><strong>klasifikasi Pelanggaran Tata Tertib</strong></h1>
-                    <div class="d-flex flex-column" style="color: #483D8B;">
+                    <h1 class="purple-text title-font"><strong>klasifikasi Pelanggaran Tata Tertib</strong></h1>
+                    <div class="d-flex flex-column purple-text">
                         <h5>Nama Admin</h5>
                         <p>Admin</p>
                     </div>
                 </div>
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Pelanggaran Tingkat V</h5>
                     </div>
                     <div class="card-body">
@@ -215,8 +198,8 @@
                     </div>
                 </div>
 
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Pelanggaran Tingkat IV</h5>
                     </div>
                     <div class="card-body">
@@ -236,8 +219,8 @@
                     </div>
                 </div>
 
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Pelanggaran Tingkat III</h5>
                     </div>
                     <div class="card-body">
@@ -255,8 +238,8 @@
                     </div>
                 </div>
 
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Pelanggaran Tingkat II</h5>
                     </div>
                     <div class="card-body">
@@ -288,8 +271,8 @@
                     </div>
                 </div>
 
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white  purple-card-header">
                         <h5 class="mb-0">Pelanggaran Tingkat I</h5>
                     </div>
                     <div class="card-body">
@@ -305,23 +288,25 @@
                         </ul>
                     </div>
                 </div>
-                <button onclick="showKodeEtik()" class="btn text-white" style="background-color: #483D8B;">kembali</button>
-                <button onclick="showSanksi()" class="btn text-white" style="background-color: #483D8B;">Selanjutnya</button>
-                <a href="Formulir.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
-
+                <div class="content-placeholder">
+                <button onclick="showKodeEtik()" class="btn text-white purple-card-header">kembali</button>
+                <button onclick="showSanksi()" class="btn text-white purple-card-header">Selanjutnya</button>
+                <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
+                </div>
             </div> 
 
             <!-- Sanksi -->
-            <div class="col py-3 min-vh-100" style="background-color: #e9e6fd; display: none;" id="sanksi">
+            <div class="col-12 offset-md-3 offset-xl-2 main-content" style="display: none; !important" id="sanksi">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 style="color: #483D8B"><strong>Sanksi Pelanggaran</strong></h1>
-                    <div class="d-flex flex-column" style="color: #483D8B;">
+                    <h1 class="purple-text title-font"><strong>Sanksi Pelanggaran</strong></h1>
+                    <div class="d-flex flex-column purple-text">
                         <h5>Nama Admin</h5>
                         <p>Admin</p>
                     </div>
                 </div>
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Klasifikasi dan Prosedur Kenaikan Tingkat Pelanggaran</h5>
                     </div>
                     <div class="card-body">
@@ -349,8 +334,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header text-white" style="background-color: #483D8B;">
+                <div class="card mb-4 shadow-sm content-placeholder">
+                    <div class="card-header text-white purple-card-header">
                         <h5 class="mb-0">Sanksi Berdasarkan Tingkat Pelanggaran</h5>
                     </div>
                     <div class="card-body">
@@ -386,30 +371,12 @@
                         </ul>
                     </div>
                 </div>
-                <button onclick="showKlasifikasi()" class="btn text-white"
-                    style="background-color: #483D8B;">kembali</button>
-                    <a href="Formulir.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
+                <div class="content-placeholder">
+                    <button onclick="showKlasifikasi()" class="btn text-white purple-card-header">kembali</button>
+                    <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
+                </div>
 
             </div>
-            <script>
-                function showKlasifikasi() {
-                    document.getElementById("kodeEtik").style.display = "none";
-                    document.getElementById("klasifikasi").style.display = "block";
-                    document.getElementById("sanksi").style.display = "none";
-                }
-
-                function showKodeEtik() {
-                    document.getElementById("kodeEtik").style.display = "block";
-                    document.getElementById("klasifikasi").style.display = "none";
-                    document.getElementById("sanksi").style.display = "none";
-                }
-                function showSanksi() {
-                    document.getElementById("kodeEtik").style.display = "none";
-                    document.getElementById("klasifikasi").style.display = "none";
-                    document.getElementById("sanksi").style.display = "block";
-                }
-            </script>
-
         </div>
     </div>
 </body>

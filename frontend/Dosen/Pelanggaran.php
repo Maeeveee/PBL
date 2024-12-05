@@ -19,7 +19,7 @@
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebarColor">
                 <div
                     class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
-                    <div class=" d-flex align-items-center mb-3">
+                    <div class="d-flex align-items-center mb-3">
                         <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="me-2"
                             style="width: 60px; height: 60px;">
                         <h1 class="fs-4 text-white m-0 d-none d-sm-inline">Polinema<br>Tertib</h1>
@@ -28,34 +28,26 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dashboard.html" class="nav-link align-middle"
+                            <a href="Dashboard.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
+
                                 <span class="ms-1 d-none d-sm-inline text-white"><Strong>Beranda</Strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Mahasiswa.html" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Mahasiswa</strong></span>
-                            </a>
-                        </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Dosen.html" class="nav-link align-middle"
+                            <a href="Formulir.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Dosen</strong></span>
+                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.html" class="nav-link align-middle"
+                            <a href="PolinemaToday.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
@@ -64,24 +56,25 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="#" class="nav-link align-middle bg-white">
+                            <a href="Pelanggaran.php" class="nav-link align-middle bg-white">
                                 <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
                                     style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline"
-                                    style="color: #483D8B;"><strong>Pelanggaran</strong></span>
+
+                                <span class="ms-1 d-none d-sm-inline" style="color: #483D8B;"><strong>Pelanggaran</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.html" class="nav-link align-middle"
+                            <a href="Profile.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
                                     style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Profile</strong></span>
+                                <span class="ms-1 d-none d-sm-inline text-white"
+                                    ><strong>Profile</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.html" class="nav-link align-middle"
+                            <a href="Notifikasi.php" class="nav-link align-middle"
                                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
                                 onmouseout="this.style.backgroundColor='transparent';">
                                 <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
@@ -107,8 +100,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 style="color: #483D8B"><strong>Kode Etik Mahasiswa</strong></h1>
                     <div class="d-flex flex-column" style="color: #483D8B;">
-                        <h5>Nama Admin</h5>
-                        <p>Admin</p>
+                        <h5>Nama Dosen</h5>
+                        <p>Dosen</p>
                     </div>
                 </div>
 
@@ -197,7 +190,7 @@
                     </div>
                     <button onclick="showKlasifikasi()" class="btn text-white"
                         style="background-color: #483D8B;">Selanjutnya</button>
-                        <a href="formSanksi.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
+                        <a href="Formulir.php" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
                 </div>
             </div>
             
@@ -314,7 +307,7 @@
                 </div>
                 <button onclick="showKodeEtik()" class="btn text-white" style="background-color: #483D8B;">kembali</button>
                 <button onclick="showSanksi()" class="btn text-white" style="background-color: #483D8B;">Selanjutnya</button>
-                <a href="formSanksi.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
+                <a href="Formulir.php" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
 
             </div> 
 
@@ -395,7 +388,7 @@
                 </div>
                 <button onclick="showKlasifikasi()" class="btn text-white"
                     style="background-color: #483D8B;">kembali</button>
-                    <a href="formSanksi.html" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
+                    <a href="Formulir.php" class="btn text-white" style="background-color: #483D8B;">Cetak Surat</a>
 
             </div>
             <script>
@@ -416,6 +409,7 @@
                     document.getElementById("sanksi").style.display = "block";
                 }
             </script>
+
         </div>
     </div>
 </body>
