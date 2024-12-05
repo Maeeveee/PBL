@@ -1,4 +1,36 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
 
+//user login sebagai admin
+if(!isset($_SESSION['username'])){
+    header('Location: ./login.php');
+    exit();
+}
+
+// hitung jumlah mahasiswa
+$queryMahasiswa = "SELECT COUNT(*) AS total_mahasiswa FROM mahasiswa";
+$stmtMahasiswa = $conn->prepare($queryMahasiswa);
+$stmtMahasiswa->execute();
+$totalMahasiswa = $stmtMahasiswa->fetch(PDO::FETCH_ASSOC)['total_mahasiswa'];
+
+// hitung jumlah dosen
+$queryDosen = "SELECT COUNT(*) AS total_dosen FROM dosen";
+$stmtDosen = $conn->prepare($queryDosen);
+$stmtDosen->execute();
+$totalDosen = $stmtDosen->fetch(PDO::FETCH_ASSOC)['total_dosen'];
+
+// leaderboard 
+$queryLeaderboard = "SELECT TOP 5 m.NIM, m.Nama, m.Email, COUNT(p.PelanggaranID) AS JumlahPelanggaran
+                       FROM Mahasiswa m
+                       JOIN Pelanggaran p ON m.NIM = p.NIM
+                       GROUP BY m.NIM, m.Nama, m.Email
+                       ORDER BY JumlahPelanggaran DESC";
+$stmtLeaderboard = $conn->prepare($queryLeaderboard);
+$stmtLeaderboard->execute();
+$leaderboardData = $stmtLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,14 +126,14 @@
                             <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-purple-large">
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-0 purple-text"><strong>Mahasiswa</strong></h4>
-                                <h5 class="purple-text-stay">999</h5>
+                                <h5 class="purple-text-stay"><?php echo $totalMahasiswa; ?></h5>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
                             <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-purple-large">
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-0 purple-text"><strong>Dosen</strong></h4>
-                                <h5 class="purple-text-stay">999</h5>
+                                <h5 class="purple-text-stay"><?php echo $totalDosen; ?></h5>
                             </div>
                         </div>
                     </div>
@@ -191,28 +223,24 @@
                 <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
                     <div id="leaderboard"></div>
-                    <script>
-                        for (let index = 0; index < 5; index++) {
-                            let tampilLeaderboard = `
+                        <?php foreach ($leaderboardData as $row): ?>
                             <div class="p-3 d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center gap-5">
                                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
-                                    <p><strong>Rizal Abrar Fahmi</strong></p>
+                                    <p><strong><?php echo htmlspecialchars($row['nama']); ?></strong></p>
                                 </div>
-                                <p class="low-pixel-hide">Tempat nim</p>
+                                <p class="low-pixel-hide"><?php echo htmlspecialchars($row['nim']); ?></p>
                                 <div class="d-flex low-pixel-hide">
                                     <p>
                                         kelas<br>
-                                        TI 2F
+                                        <?php echo htmlspecialchars($row['kelas']); ?>
                                     </p>
                                 </div>
-                                <p class="low-pixel-hide"><Strong>I</Strong></p>   
-                                <a href="formSanksi.php" class="btn" style="color: #483D8B;">Print</a>
+                                <p class="low-pixel-hide"><strong><?php echo htmlspecialchars($row['total_pelanggaran']); ?></strong></p>
+                                <a href="formSanksi.php?nim=<?php echo urlencode($row['nim']); ?>" class="btn" style="color: #483D8B;">Print</a>
                             </div>
-                            `;
-                            document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
-                        }
-                    </script>
+                        <?php endforeach; ?>
+                    </div>    
                 </div>
             </div>
         </div>
