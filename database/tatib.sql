@@ -33,7 +33,7 @@ CREATE TABLE ProgramStudi (
 );
 
 CREATE TABLE Users (
-	UsersID int PRIMARY KEY,
+	UsersID int PRIMARY KEY IDENTITY(1,1),
     Username VARCHAR(50),
 	Password VARCHAR(255) NOT NULL,
     Role VARCHAR(20) CHECK (Role IN ('Mahasiswa', 'Dosen', 'Admin')) NOT NULL,
