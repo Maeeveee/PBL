@@ -3,7 +3,7 @@ session_start();
 include '../../backend/config_db.php';
 
 //user login sebagai admin
-if(!isset($_SESSION['username'])){
+if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
 }
@@ -20,15 +20,12 @@ $stmtDosen = $conn->prepare($queryDosen);
 $stmtDosen->execute();
 $totalDosen = $stmtDosen->fetch(PDO::FETCH_ASSOC)['total_dosen'];
 
-// leaderboard 
-$queryLeaderboard = "SELECT TOP 5 m.NIM, m.Nama, m.Email, COUNT(p.PelanggaranID) AS JumlahPelanggaran
-                       FROM Mahasiswa m
-                       JOIN Pelanggaran p ON m.NIM = p.NIM
-                       GROUP BY m.NIM, m.Nama, m.Email
-                       ORDER BY JumlahPelanggaran DESC";
-$stmtLeaderboard = $conn->prepare($queryLeaderboard);
-$stmtLeaderboard->execute();
-$leaderboardData = $stmtLeaderboard->fetchAll(PDO::FETCH_ASSOC);
+$sql = "EXEC GetTopMahasiswaPelanggar @TopN = :topN";
+$stmt = $conn->prepare($sql);
+$topN = 5;
+$stmt->bindParam(':topN', $topN, PDO::PARAM_INT);
+$stmt->execute();
+$leaderboardData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -46,7 +43,7 @@ $leaderboardData = $stmtLeaderboard->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <div class="container-fluid">
         <div class="row">
-            
+
             <!-- Sidebar-->
             <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
@@ -222,28 +219,34 @@ $leaderboardData = $stmtLeaderboard->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Leaderboard Pelanggar -->
                 <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
-                    <div id="leaderboard"></div>
-                        <?php foreach ($leaderboardData as $row): ?>
-                            <div class="p-3 d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-5">
-                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
-                                    <p><strong><?php echo htmlspecialchars($row['nama']); ?></strong></p>
-                                </div>
-                                <p class="low-pixel-hide"><?php echo htmlspecialchars($row['nim']); ?></p>
-                                <div class="d-flex low-pixel-hide">
-                                    <p>
-                                        kelas<br>
-                                        <?php echo htmlspecialchars($row['kelas']); ?>
-                                    </p>
-                                </div>
-                                <p class="low-pixel-hide"><strong><?php echo htmlspecialchars($row['total_pelanggaran']); ?></strong></p>
-                                <a href="formSanksi.php?nim=<?php echo urlencode($row['nim']); ?>" class="btn" style="color: #483D8B;">Print</a>
+                    <?php foreach ($leaderboardData as $row): ?>
+                        <div class="p-3 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-5">
+                                <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
+                                <p><strong>
+                                    Nama<br>
+                                    <?php echo htmlspecialchars($row['Nama']); ?>
+                                    </strong>
+                                </p>
                             </div>
-                        <?php endforeach; ?>
-                    </div>    
+                                <p class="low-pixel-hide">
+                                    NIM<br>
+                                    <?php echo htmlspecialchars($row['NIM']); ?>
+                                </p>
+                            <div class="d-flex low-pixel-hide">
+                                <p>
+                                    Jumlah Pelanggaran<br>
+                                    <?php echo htmlspecialchars($row['JumlahPelanggaran']); ?>
+                                </p>
+                            </div>
+                            
+                            <a href="formSanksi.php?nim=<?php echo urlencode($row['NIM']); ?>" class="btn" style="color: #483D8B;">Print</a>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

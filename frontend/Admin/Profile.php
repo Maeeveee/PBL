@@ -2,22 +2,37 @@
 session_start();
 include '../../backend/config_db.php';
 
-// user login sebagai admin
-if(!isset($_SESSION['username'])){
+// Periksa apakah user telah login
+if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
 }
 
-// info dari admin
-$stmt = $conn->prepare("SELECT a.AdminID, a.NamaAdmin, a.EmailAdmin, a.NoTelepon, u.Username, u.Role 
-                       FROM Admin a
-                       JOIN Users u ON a.UserID = u.Username
-                       WHERE u.Username = :username");
-$stmt->execute(['username' => $_SESSION['username']]);
-$admin = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-?>
+// Ambil username dari session
+$username = $_SESSION['username'];
 
+try {
+    // Query untuk mendapatkan informasi admin berdasarkan username
+    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
+            FROM Admin A
+            INNER JOIN Users U ON A.AdminID = U.AdminID
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data admin tidak ditemukan
+    if (!$admin) {
+        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +50,7 @@ $admin = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="container-fluid">
         <div class="row">
 
-            <!-- Sidebar-->
+            <!-- Sidebar -->
             <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
@@ -110,7 +125,7 @@ $admin = $stmt->fetch(PDO::FETCH_ASSOC);
                 <!-- Profile -->
                 <div class="p-3 bg-white rounded d-flex flex-column content-placeholder content-placeholder-mid">
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
-                    <div class=" d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
                             <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                             <p>Admin</p>
@@ -124,7 +139,7 @@ $admin = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </body>
