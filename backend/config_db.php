@@ -1,8 +1,8 @@
 <?php
-$serverName = "DESKTOP-EJS5FCV"; 
+$serverName = "RAFI"; 
 $database = "tatib";          
-$username = "";                  
-$password = "";                  
+$username = "rajend";                  
+$password = "tampan";                  
 
 try {
    $conn = new PDO("sqlsrv:server=$serverName;Database=$database", $username, $password);
