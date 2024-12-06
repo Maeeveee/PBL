@@ -37,10 +37,8 @@ CREATE TABLE Users (
     Username VARCHAR(50),
 	Password VARCHAR(255) NOT NULL,
     Role VARCHAR(20) CHECK (Role IN ('Mahasiswa', 'Dosen', 'Admin')) NOT NULL,
-	NIM CHAR(12),
 	NIDN CHAR(10),
 	AdminID INT,
-	FOREIGN KEY (NIM) REFERENCES Mahasiswa(NIM) ON DELETE CASCADE,
     FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN) ON DELETE CASCADE,
 	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID) ON DELETE CASCADE
 );
@@ -61,7 +59,9 @@ CREATE TABLE Pelanggaran (
 	Surat VARCHAR(255),
 	Status VARCHAR(20) DEFAULT 'Pending',
 	AdminID int,
-	Admin int FOREIGN KEY REFERENCES Admin(AdminID)
+	Admin int FOREIGN KEY REFERENCES Admin(AdminID),
+    TugasID INT,
+    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID)
 );
 
 CREATE TABLE Tugas (
@@ -71,6 +71,8 @@ CREATE TABLE Tugas (
     TanggalSelesai DATE,
 	NIDN CHAR(10),
 	NIM CHAR(12),
+    TugasID INT,
+    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID),
 	FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN) ON DELETE CASCADE,
     FOREIGN KEY (NIM) REFERENCES Mahasiswa(NIM) ON DELETE CASCADE
 );
@@ -188,7 +190,7 @@ BEGIN
     IF @Status = 'Selesai'
     BEGIN
         -- Mengirim notifikasi dengan AdminID yang sesuai
-        INSERT INTO Notifikasi (Judul, Isi, UserID, AdminID)
+        INSERT INTO Notifikasi (Judul, Isi, UsersID, AdminID)
         VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
     END;
 END;
@@ -196,20 +198,6 @@ END;
 ALTER TABLE Mahasiswa
 ADD TugasID INT NULL,
     FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
-
---- RUNNING INI YAA TEMAN-TEMAN
-ALTER TABLE Tugas
-DROP CONSTRAINT FK__Tugas__NIM__5629CD9C; -- Sesuaikan dengan nama constraint yang ditemukan
-
-ALTER TABLE Tugas
-DROP COLUMN NIM;
-
-ALTER TABLE Tugas
-ADD PelanggaranID INT;
-
-ALTER TABLE Pelanggaran
-ADD TugasID INT NULL;
-
 
 -- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
 CREATE PROCEDURE GetTopMahasiswaPelanggar
