@@ -215,3 +215,6 @@ BEGIN
 END;
 
 EXEC GetTopMahasiswaPelanggar @TopN = 5;
+
+ALTER TABLE Pelanggaran
+ADD FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
