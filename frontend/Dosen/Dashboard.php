@@ -201,7 +201,7 @@
                                     </p>
                                 </div>
                                 <p class="low-pixel-hide"><Strong>I</Strong></p>   
-                                <a href="formSanksi.php" class="btn" style="color: #483D8B;">Print</a>
+                                <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
                             </div>
                             `;
                             document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
