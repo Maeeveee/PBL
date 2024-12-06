@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,84 +7,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
-    <script src="script/script.js"></script>
+    <link rel="stylesheet" href="/myWeb/PBL/frontend/style/style.css">
     <title>PolinemaTertib</title>
 </head>
 
-<body style="background-color: #483D8B;">
+<body>
     <div class="container-fluid">
-        <div class="row flex-nowrap">
+        <div class="row">
 
             <!-- Sidebar-->
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebarColor">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 position-fixed">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="me-2" style="width: 60px; height: 60px;">
-                        <h1 class="fs-4 text-white m-0 d-none d-sm-inline">Polinema<br>Tertib</h1>
+            <div class="sidebar">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="img-sidebar">
+                        <h1 class="fs-5 ms-2 d-none d-sm-inline title-sidebar mid-pixel-hide">Polinema<br>Tertib</h1>
                     </div>
 
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                        id="menu">
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="#" class="nav-link align-middle bg-white">
-                                <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="nav-icon me-2"
-                                    style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline"
-                                    style="color: #483D8B;"><Strong>Beranda</Strong></span>
+                    <!-- Menu Sidebar -->
+                    <ul class="nav nav-pills flex-column mb-auto align-items-center align-items-sm-start">
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="#" class="align-middle bg-white">
+                                <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="img-purple">
+                                <span class="ms-1 d-none d-sm-inline purple-text"><Strong>Beranda</Strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Formulir.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Formulir</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Formulir.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Formulir</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="PolinemaToday.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>PolinemaToday</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="PolinemaToday.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>PolinemaToday</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Pelanggaran.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Pelanggaran</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Pelanggaran.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Pelanggaran</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Profile.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Profile</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Profile.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/user.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Profile</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="Notifikasi.php" class="nav-link align-middle"
-                                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                                onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Notifikasi</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="Notifikasi.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/activity.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Notifikasi</strong></span>
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center mt-2 mb-2">
-                            <a href="/myWeb/PBL/frontend/Login.php" class="nav-link align-middle" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
-                            onmouseout="this.style.backgroundColor='transparent';">
-                                <img src="/myWeb/PBL/frontend/img/logout.png" alt="" class="nav-icon me-2"
-                                    style="filter:invert(100%); width: 25px; height: 25px;">
-                                <span class="ms-1 d-none d-sm-inline text-white"><strong>Logout</strong></span>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="/myWeb/PBL/frontend/Login.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/logout.png" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Logout</strong></span>
                             </a>
                         </li>
                     </ul>
@@ -91,43 +72,41 @@
             </div>
 
             <!-- Main Content -->
-            <div class="col py-3" style="background-color: #e9e6fd;">
+            <div class="col-12 offset-md-3 offset-xl-2 main-content">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 style="color: #483D8B"><strong>Beranda</strong></h1>
-                    <div class="d-flex flex-column" style="color: #483D8B;">
+                    <h1 class="purple-text title-font"><strong>Beranda</strong></h1>
+                    <div class="d-flex flex-column purple-text">
                         <h5>Nama Dosen</h5>
                         <p>Dosen</p>
                     </div>
                 </div>
 
                 <!-- Tampil  Jumlah Dosen & Mahasiswa -->
-                <div class="bg-white p-3 rounded" style="width: 700px; margin: 0 auto;">
+                <div class="bg-white p-3 rounded content-placeholder">
                     <div class="d-flex justify-content-center gap-5">
                         <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/reading.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
+                            <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-purple-large">
                             <div class="d-flex flex-column ms-3">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Mahasiswa</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
+                                <h4 class="mb-0 purple-text"><strong>Mahasiswa</strong></h4>
+                                <h5 class="purple-text-stay">999</h5>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
-                            <img src="/myWeb/PBL/frontend/img/teacher.svg" alt=""
-                                style="filter: invert(26%) sepia(10%) saturate(5129%) hue-rotate(215deg) brightness(91%) contrast(91%); width: 60px; height: 60px;">
-                            <div class="d-flex flex-column ms-3 ">
-                                <h4 class="mb-0" style="color: #483D8B;"><strong>Dosen</strong></h4>
-                                <h5 style="color: #483D8B;">999</h5>
+                            <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-purple-large">
+                            <div class="d-flex flex-column ms-3">
+                                <h4 class="mb-0 purple-text"><strong>Dosen</strong></h4>
+                                <h5 class="purple-text-stay">999</h5>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kalender dan Pesan -->
-                <div class="d-flex justify-content-center">
+                <!-- Kalender -->
+                <div class="d-flex justify-content-center middle-gap">
                     <!-- Kalender -->
-                    <div class="bg-white p-3 rounded" style="width: 500px;margin: 20px;">
+                    <div class="bg-white p-3 rounded content-placeholder">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h4 style="color: #483D8B;"><strong>Kalender</strong></h4>
+                            <h4 class="purple-text"><strong>Kalender</strong></h4>
                             <div class="d-flex align-items-center gap-3">
                                 <h4 style="color: #483D8B;"><strong>December 2024</strong></h4>
                             </div>
@@ -200,52 +179,30 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Pesan -->
-                    <div class="bg-white p-3 rounded" style="width: 500px;margin: 20px;">
-                        <h4 style="color: #483D8B;"><strong>Pesan</strong></h4>
-                        <div id="pesan"></div>
-                        <script>
-                            for (let index = 0; index < 4; index++) {
-                                let tampilPesan = ` <div class="p-3 d-flex justify-content-between">
-                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
-                            <div class="d-flex flex-column" style="height: 50px;">
-                                <p style="color: #483D8B;"><strong>Rizal Abrar Fahmi</strong><br>
-                                    Masukkan pesan disini
-                                </p>
-                            </div>
-                            <p style="color: #483D8B;">11:40</p>
-                        </div>`;
-                        document.getElementById("pesan").innerHTML += tampilPesan;
-                            }
-                        </script>
-                    </div>
                 </div>
 
                 <!-- Leaderboard Pelanggar -->
-                <div class="bg-white p-3 rounded" style="width: 1200px; margin: 0 auto; color: #483D8B;">
+                <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
                     <div id="leaderboard"></div>
                     <script>
                         for (let index = 0; index < 5; index++) {
                             let tampilLeaderboard = `
-                            <div class="p-3 d-flex justify-content-between">
-                        <div class="d-flex justify-content-center gap-5">
-                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" style="width: 50px; height: 50px;">
-                            <p style="color: #483D8B;"><strong>Rizal Abrar Fahmi</strong></p>
-                        </div>
-                        <p>Tempat nim</p>
-                        <div class="d-flex gap-2">
-                            <div class="d-flex">
-                                <p>
-                                    kelas <br>
-                                    TI 2F
-                                </p>
+                            <div class="p-3 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-5">
+                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
+                                    <p><strong>Rizal Abrar Fahmi</strong></p>
+                                </div>
+                                <p class="low-pixel-hide">Tempat nim</p>
+                                <div class="d-flex low-pixel-hide">
+                                    <p>
+                                        kelas<br>
+                                        TI 2F
+                                    </p>
+                                </div>
+                                <p class="low-pixel-hide"><Strong>I</Strong></p>   
+                                <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
                             </div>
-                        </div>
-                        <p><Strong>I</Strong></p>   
-                        <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
-                        </div>
                             `;
                             document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
                         }
