@@ -18,7 +18,7 @@
            <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="img-sidebar">
+                        <img src="/myWeb/PBL/frontend/img/logoPoltib.png" alt="Logo JTI" class="img-sidebar">
                         <h1 class="fs-5 ms-2 d-none d-sm-inline title-sidebar mid-pixel-hide">Polinema<br>Tertib</h1>
                     </div>
 

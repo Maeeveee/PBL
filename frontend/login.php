@@ -77,10 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/myWeb/PBL/frontend/style/style.css">
     <title>Login</title>
 </head>
 <body>
-        <div class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center" style="background-color: #483D8B;">
+        <div class="container-fluid vh-100 d-flex flex-column align-items-center justify-content-center purple-card-header">
             <h1 class="text-white">Polinema Tertib</h1>
             <div class="p-4 rounded" style="background-color: #e9e6fd; max-width: 400px; width: 100%;">
                 <?php 
@@ -91,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ?>
                 <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                     <div class="text-center">
-                        <img src="img/logoJti.svg" alt="" style="width: 70px; height: 70px;">
+                        <img src="img/logoPoltib.png" alt="" style="width: 70px; height: 70px;">
                     </div>
                     <input type="text" class="form-control m-2" name="username" id="username" placeholder="Username">
                     <input type="password" class="form-control m-2" name="password" id="password" placeholder="Password">

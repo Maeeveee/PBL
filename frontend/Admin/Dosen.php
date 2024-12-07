@@ -1,3 +1,62 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+//user login sebagai admin
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+// Ambil parameter pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+try {
+    // Query untuk menampilkan semua dosen jika tidak ada pencarian
+    if (empty($search)) {
+        $query = "SELECT * FROM Dosen";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+    } else {
+        // Query dengan kondisi pencarian
+        $query = "SELECT * FROM Dosen WHERE Nama LIKE :search OR Email LIKE :search";
+        $stmt = $conn->prepare($query);
+        $searchParam = "%$search%";
+        $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    $dosenList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Tangani error dengan baik
+    echo "Error: " . $e->getMessage();
+    exit();
+}
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi admin berdasarkan username
+    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
+            FROM Admin A
+            INNER JOIN Users U ON A.AdminID = U.AdminID
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data admin tidak ditemukan
+    if (!$admin) {
+        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,11 +73,11 @@
     <div class="container-fluid">
         <div class="row">
 
-           <!-- Sidebar-->
-           <div class="sidebar">
+            <!-- Sidebar-->
+            <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="img-sidebar">
+                        <img src="/myWeb/PBL/frontend/img/logoPoltib.png" alt="Logo JTI" class="img-sidebar">
                         <h1 class="fs-5 ms-2 d-none d-sm-inline title-sidebar mid-pixel-hide">Polinema<br>Tertib</h1>
                     </div>
 
@@ -81,35 +140,30 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Dosen</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
 
                 <!-- Form cari -->
                 <div class="p-3 content-placeholder">
-                    <input type="text" placeholder="Cari.." class=" form-control" style="width: 25%;">
+                    <form method="GET" action="Dosen.php">
+                        <input type="text" name="search" placeholder="Cari.." class="form-control" style="width: 25%;">
+                        <button type="submit" class="btn btn-primary mt-2">Cari</button>
+                    </form>
                 </div>
 
                 <!-- Tampil Dosen -->
-                <div class="d-flex flex-wrap content-placeholder" id="cardDosen"></div>
-                <div>
-                    <script>
-                        for (let index = 0; index < 15; index++) {
-                            let tampilDosen = `
-                            <div class="card p-3 d-flex align-items-center m-3" style="width: 18rem;">
-                                <img src="/myWeb/PBL/frontend/img/roundProfile.png" class="card-img-top" alt="" style="height=100px; width: 100px;">
-                                <div class="card-body">
-                                    <p class="d-flex justify-content-center align-items-center purple-text-stay">
-                                    <strong>Nama Dosen</strong><br>
-                                    </p>
-                                    <p class="text-secondary">Nama matakuliah</p>
-                                    </div>
+                <div class="d-flex flex-wrap content-placeholder" id="cardDosen">
+                    <?php foreach ($dosenList as $dosen): ?>
+                        <div class="card p-3 d-flex align-items-center m-3" style="width: 18rem;">
+                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" class="card-img-top" alt="" style="height:100px; width: 100px;">
+                            <div class="card-body">
+                                <p class="purple-text-stay"><strong><?php echo $dosen['Nama']; ?></strong></p>
+                                <p class="text-secondary"><?php echo $dosen['Email']; ?></p>
                             </div>
-                            `;
-                            document.getElementById("cardDosen").innerHTML += tampilDosen;
-                        }
-                    </script>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

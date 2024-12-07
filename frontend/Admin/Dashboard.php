@@ -27,6 +27,29 @@ $stmt->bindParam(':topN', $topN, PDO::PARAM_INT);
 $stmt->execute();
 $leaderboardData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi admin berdasarkan username
+    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
+            FROM Admin A
+            INNER JOIN Users U ON A.AdminID = U.AdminID
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data admin tidak ditemukan
+    if (!$admin) {
+        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +71,7 @@ $leaderboardData = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="/myWeb/PBL/frontend/img/logoJti.svg" alt="Logo JTI" class="img-sidebar">
+                        <img src="/myWeb/PBL/frontend/img/logoPoltib.png" alt="Logo JTI" class="img-sidebar">
                         <h1 class="fs-5 ms-2 d-none d-sm-inline title-sidebar mid-pixel-hide">Polinema<br>Tertib</h1>
                     </div>
 
@@ -111,7 +134,7 @@ $leaderboardData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
