@@ -195,10 +195,6 @@ BEGIN
     END;
 END;
 
-ALTER TABLE Mahasiswa
-ADD TugasID INT NULL,
-    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
-
 -- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
 CREATE PROCEDURE GetTopMahasiswaPelanggar
     @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
