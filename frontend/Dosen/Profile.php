@@ -2,7 +2,7 @@
 session_start();
 include '../../backend/config_db.php';
 
-//user login sebagai dosen
+// Cek apakah user sudah login sebagai dosen
 if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
@@ -28,11 +28,22 @@ try {
         $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
     }
 
+    // Query untuk mendapatkan data pendidikan dosen
+    $sqlPendidikan = "SELECT Universitas, TahunMasuk, TahunLulus FROM Pendidikan WHERE NIDN = :NIDN";
+    $stmtPendidikan = $conn->prepare($sqlPendidikan);
+    $stmtPendidikan->bindParam(':NIDN', $dosen['NIDN'], PDO::PARAM_STR);
+    $stmtPendidikan->execute();
+    $pendidikan = $stmtPendidikan->fetchAll(PDO::FETCH_ASSOC);
+
+    // Query untuk mendapatkan data pengalaman dosen
+    $sqlPengalaman = "SELECT Deskripsi FROM Pengalaman WHERE NIDN = :NIDN";
+    $stmtPengalaman = $conn->prepare($sqlPengalaman);
+    $stmtPengalaman->bindParam(':NIDN', $dosen['NIDN'], PDO::PARAM_STR);
+    $stmtPengalaman->execute();
+    $pengalaman = $stmtPengalaman->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +123,7 @@ try {
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Profile</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                    <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
+                        <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                         <p>Dosen</p>
                     </div>
                 </div>
@@ -126,30 +137,31 @@ try {
                             <p>Dosen</p>
                         </div>
                         <div>
-                        <p class="purple-text">HP: <?php echo htmlspecialchars($dosen['NoTelepon']); ?></p>
+                            <p class="purple-text">HP: <?php echo htmlspecialchars($dosen['NoTelepon']); ?></p>
                         </div>
                         <div>
-                        <p class="purple-text">Email: <?php echo htmlspecialchars($dosen['Email']); ?></p>
+                            <p class="purple-text">Email: <?php echo htmlspecialchars($dosen['Email']); ?></p>
                         </div>
-                    </div>
-                    <div class="p-3 purple-text-stay">
-                        <h5><Strong>Info Terkait</Strong></h5>
-                        <p>Masukkan Text</p>
                     </div>
                     <div class="p-3 purple-text-stay">
                         <h5><Strong>Pendidikan</Strong></h5>
                         <ul>
-                            <li>History major, univ</li>
-                            <p class="text-secondary">2023</p>
+                            <?php foreach ($pendidikan as $pendidikanItem): ?>
+                                <li><?php echo htmlspecialchars($pendidikanItem['Universitas']); ?>, <?php echo htmlspecialchars($pendidikanItem['TahunMasuk']); ?> - <?php echo htmlspecialchars($pendidikanItem['TahunLulus']); ?></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="p-3 purple-text-stay">
                         <h5><Strong>Pengalaman</Strong></h5>
-                        <p>Masukkan Text</p>
+                        <ul>
+                            <?php foreach ($pengalaman as $pengalamanItem): ?>
+                                <li><?php echo htmlspecialchars($pengalamanItem['Deskripsi']); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </body>
