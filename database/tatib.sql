@@ -230,9 +230,6 @@ ADD Pengalaman VARCHAR(255);
 ALTER TABLE Mahasiswa
 ADD NamaWali VARCHAR(255);
 
-
-use tatib;
-
 DELETE FROM JenisPelanggaran;
 
 -- Nonaktifkan constraint sementara
