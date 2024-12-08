@@ -1,3 +1,40 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+//user login sebagai dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi dosen berdasarkan username
+    $sql = "SELECT A.NIDN, A.Nama, A.Email, A.NoTelepon
+            FROM Dosen A
+            INNER JOIN Users U ON A.NIDN = U.NIDN
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data dosen tidak ditemukan
+    if (!$dosen) {
+        $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,7 +112,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Profile</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Dosen</h5>
+                    <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                         <p>Dosen</p>
                     </div>
                 </div>
@@ -85,14 +122,14 @@
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
                     <div class=" d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
-                            <h5>Rizal Abrar</h5>
+                        <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                             <p>Dosen</p>
                         </div>
                         <div>
-                            <p class="purple-text">HP: 08123456789</p>
+                        <p class="purple-text">HP: <?php echo htmlspecialchars($dosen['NoTelepon']); ?></p>
                         </div>
                         <div>
-                            <p class="purple-text">Email: 7AqgB@example.com</p>
+                        <p class="purple-text">Email: <?php echo htmlspecialchars($dosen['Email']); ?></p>
                         </div>
                     </div>
                 </div>

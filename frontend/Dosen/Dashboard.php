@@ -1,4 +1,56 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
 
+//user login sebagai dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+// hitung jumlah mahasiswa
+$queryMahasiswa = "SELECT COUNT(*) AS total_mahasiswa FROM mahasiswa";
+$stmtMahasiswa = $conn->prepare($queryMahasiswa);
+$stmtMahasiswa->execute();
+$totalMahasiswa = $stmtMahasiswa->fetch(PDO::FETCH_ASSOC)['total_mahasiswa'];
+
+// hitung jumlah dosen
+$queryDosen = "SELECT COUNT(*) AS total_dosen FROM dosen";
+$stmtDosen = $conn->prepare($queryDosen);
+$stmtDosen->execute();
+$totalDosen = $stmtDosen->fetch(PDO::FETCH_ASSOC)['total_dosen'];
+
+$sql = "EXEC GetTopMahasiswaPelanggar @TopN = :topN";
+$stmt = $conn->prepare($sql);
+$topN = 5;
+$stmt->bindParam(':topN', $topN, PDO::PARAM_INT);
+$stmt->execute();
+$leaderboardData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi dosen berdasarkan username
+    $sql = "SELECT A.NIDN, A.Nama, A.Email, A.NoTelepon
+            FROM Dosen A
+            INNER JOIN Users U ON A.NIDN = U.NIDN
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data dosen tidak ditemukan
+    if (!$dosen) {
+        $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,7 +128,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Dosen</h5>
+                    <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                         <p>Dosen</p>
                     </div>
                 </div>
@@ -88,14 +140,14 @@
                             <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-purple-large">
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-0 purple-text"><strong>Mahasiswa</strong></h4>
-                                <h5 class="purple-text-stay">999</h5>
+                                <h5 class="purple-text-stay"><?php echo $totalMahasiswa; ?></h5>
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center">
                             <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-purple-large">
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-0 purple-text"><strong>Dosen</strong></h4>
-                                <h5 class="purple-text-stay">999</h5>
+                                <h5 class="purple-text-stay"><?php echo $totalDosen; ?></h5>
                             </div>
                         </div>
                     </div>
@@ -184,29 +236,30 @@
                 <!-- Leaderboard Pelanggar -->
                 <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
-                    <div id="leaderboard"></div>
-                    <script>
-                        for (let index = 0; index < 5; index++) {
-                            let tampilLeaderboard = `
-                            <div class="p-3 d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-5">
-                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
-                                    <p><strong>Rizal Abrar Fahmi</strong></p>
-                                </div>
-                                <p class="low-pixel-hide">Tempat nim</p>
-                                <div class="d-flex low-pixel-hide">
-                                    <p>
-                                        kelas<br>
-                                        TI 2F
-                                    </p>
-                                </div>
-                                <p class="low-pixel-hide"><Strong>I</Strong></p>   
-                                <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
+                    <?php foreach ($leaderboardData as $row): ?>
+                        <div class="p-3 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-5">
+                                <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
+                                <p><strong>
+                                    Nama<br>
+                                    <?php echo htmlspecialchars($row['Nama']); ?>
+                                    </strong>
+                                </p>
                             </div>
-                            `;
-                            document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
-                        }
-                    </script>
+                                <p class="low-pixel-hide">
+                                    NIM<br>
+                                    <?php echo htmlspecialchars($row['NIM']); ?>
+                                </p>
+                            <div class="d-flex low-pixel-hide">
+                                <p>
+                                    Jumlah Pelanggaran<br>
+                                    <?php echo htmlspecialchars($row['JumlahPelanggaran']); ?>
+                                </p>
+                            </div>
+                            
+                            <a href="formSanksi.php?nim=<?php echo urlencode($row['NIM']); ?>" class="btn" style="color: #483D8B;">Print</a>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

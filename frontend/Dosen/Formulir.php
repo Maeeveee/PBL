@@ -1,3 +1,103 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+// User login sebagai dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi dosen berdasarkan username
+    $sql = "SELECT A.NIDN, A.Nama, A.Email, A.NoTelepon
+            FROM Dosen A
+            INNER JOIN Users U ON A.NIDN = U.NIDN
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data dosen tidak ditemukan
+    if (!$dosen) {
+        $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+
+// Periksa apakah form dikirim
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    
+
+
+    $namaLengkap = $_POST['namaLengkap'];
+    $tanggalPelanggaran = $_POST['tanggalPelanggaran'];
+    $jenisPelanggaran = $_POST['jenisPelanggaran'];  // ID jenis pelanggaran yang dipilih
+    $nidn = $dosen['NIDN']; // Gunakan NIDN yang diambil dari database
+    $nim = $_POST['nim']; // Anggap ada input untuk NIM
+    $deskripsiPelanggaran = $_POST['deskripsiPelanggaran'];
+    $tempatPelanggaran = $_POST['tempatPelanggaran'];
+
+    // Cek surat jika ada, beri nilai null jika tidak ada
+    $surat = isset($_POST['surat']) ? $_POST['surat'] : null;
+
+    // Cek adminID di session, beri nilai null jika tidak ada
+    $adminID = isset($_SESSION['adminID']) ? $_SESSION['adminID'] : null;
+
+    $tugasID = isset($_POST['tugasID']) ? $_POST['tugasID'] : NULL;  // ID tugas jika relevan
+
+    // Proses upload file
+    $buktiFoto = null;
+    if (isset($_FILES['buktiFoto']) && $_FILES['buktiFoto']['error'] == 0) {
+        $targetDir = "D:/FilePelanggaran/"; // Path yang lebih aman untuk upload
+        $buktiFoto = basename($_FILES['buktiFoto']['name']); // Ambil nama file
+        $targetFile = $targetDir . $buktiFoto; // Gabungkan path dan nama file
+
+        // Pastikan file berhasil dipindahkan ke folder target
+        if (!move_uploaded_file($_FILES['buktiFoto']['tmp_name'], $targetFile)) {
+            echo "Error uploading the file.";
+            exit();
+        }
+    }
+
+    try {
+        // Insert langsung ke tabel Pelanggaran
+        $query = "INSERT INTO Pelanggaran (
+            NIM, NIDN, JenisID, TanggalPelanggaran, BuktiFoto, Surat, Status, AdminID, TugasID, TempatPelanggaran, DeskripsiPelanggaran
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->execute([
+            $nim,
+            $nidn,
+            $jenisPelanggaran,
+            $tanggalPelanggaran,
+            $buktiFoto, // Simpan hanya nama file di database
+            $surat,
+            'Pending',
+            $adminID,
+            $tugasID,
+            $tempatPelanggaran,
+            $deskripsiPelanggaran 
+        ]);
+    } catch (PDOException $e) {
+        die("Database error: " . $e->getMessage());
+    }
+}
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,32 +170,33 @@
                 </div>
             </div>
 
-            <!-- Main Content -->
-            <div  class="col-12 offset-md-3 offset-xl-2 main-content">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="purple-text title-font"><strong>Form Unggahan Sanksi</strong></h1>
-                    <div class="d-flex flex-column purple-text">
-                        <h5>Nama Dosen</h5>
-                        <p>Dosen</p>
+            <form method="POST" enctype="multipart/form-data">
+                <!-- Main Content -->
+                <div class="col-12 offset-md-3 offset-xl-2 main-content">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="purple-text title-font"><strong>Form Unggahan Sanksi</strong></h1>
+                        <div class="d-flex flex-column purple-text">
+                            <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
+                            <p>Dosen</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card mb-4 shadow-sm content-placeholder">
-                    <div class="card-header text-white purple-card-header">
-                        <h5 class="mb-0 ">Bukti Melakukan Pelanggaran</h5>
-                    </div>
-                    <div class=" card-body">
+                    <div class="card mb-4 shadow-sm content-placeholder">
+                        <div class="card-header text-white purple-card-header">
+                            <h5 class="mb-0 ">Bukti Melakukan Pelanggaran</h5>
+                        </div>
+                        <div class=" card-body">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="buktiFoto">Bukti Foto</label>
-                                        <input type="file" class="form-control-file" id="buktiFoto" accept="image/*">
+                                        <input type="file" class="form-control-file" id="buktiFoto" name="buktiFoto" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="namaLengkap">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="namaLengkap" placeholder="Samantha">
+                                        <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" placeholder="Samantha">
                                     </div>
                                 </div>
                             </div>
@@ -104,21 +205,38 @@
                                     <div class="form-group">
                                         <label for="tanggalPelanggaran">Tanggal Pelanggaran & Tempat</label>
                                         <div class="input-group gap-2">
-                                            <input type="text" class="form-control" id="tanggalPelanggaran" placeholder="24 November 2024">
+                                            <input type="date" name="tanggalPelanggaran" required>
                                             <div class="input-group-append">
-                                                <input type="text" class="form-control" placeholder="LSI 1">
+                                                <input type="text" class="form-control" name="tempatPelanggaran" placeholder="LSI 1">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group"> <label for="jenisPelanggaran">Jenis Pelanggaran</label>
-                                        <select class="form-control" id="jenisPelanggaran">
+                                    <div class="form-group">
+                                        <label for="jenisPelanggaran">Jenis Pelanggaran</label>
+                                        <select class="form-control" id="jenisPelanggaran" name="jenisPelanggaran" required>
                                             <option value="">Pilih Jenis Pelanggaran</option>
-                                            <option value="ringan">Pelanggaran Ringan</option>
-                                            <option value="sedang">Pelanggaran Sedang</option>
-                                            <option value="berat">Pelanggaran Berat</option>
+                                            <?php
+                                            // Koneksi ke database dan ambil data jenis pelanggaran
+                                            include '../../backend/config_db.php';
+
+                                            try {
+                                                // Query untuk mengambil data jenis pelanggaran
+                                                $sql = "SELECT JenisID, NamaPelanggaran FROM JenisPelanggaran";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+                                                $jenisPelanggaran = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                                // Loop untuk menampilkan pilihan jenis pelanggaran
+                                                foreach ($jenisPelanggaran as $jenis) {
+                                                    echo "<option value='" . $jenis['JenisID'] . "'>" . $jenis['NamaPelanggaran'] . "</option>";
+                                                }
+                                            } catch (PDOException $e) {
+                                                echo "Error: " . $e->getMessage();
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
@@ -126,26 +244,28 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email" placeholder="masukkan email anda" class="form-control">
+                                        <label for="nim">NIM</label>
+                                        <input type="text" class="form-control" id="nim" name="nim" placeholder="Masukkan NIM" required>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Telepon</label>
-                                        <input type="text" name="telepon" id="telepon" placeholder="Masukkan nomor telepon anda" class="form-control">
+                                        <label for="email">Email</label>
+                                        <input type="email" name="email" id="email" placeholder="masukkan email anda" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="deskripsi">Deskripsi Pelanggaran</label>
-                                <textarea class="form-control" id="deskripsi" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
+                                <textarea class="form-control" id="deskripsi" name="deskripsiPelanggaran" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
                             </div>
                             <button type="submit" class="btn text-white purple-card-header">Kirim Bukti</button>
                         </div>
+                    </div>
                 </div>
-             </div>
+            </form>
+
 
         </div>
     </div>
