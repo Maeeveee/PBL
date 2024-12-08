@@ -122,7 +122,7 @@ try {
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
                     <div class=" d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
-                        <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
+                            <h5><Strong>Rizal Abrar</Strong></h5>
                             <p>Dosen</p>
                         </div>
                         <div>
@@ -131,6 +131,21 @@ try {
                         <div>
                         <p class="purple-text">Email: <?php echo htmlspecialchars($dosen['Email']); ?></p>
                         </div>
+                    </div>
+                    <div class="p-3 purple-text-stay">
+                        <h5><Strong>Info Terkait</Strong></h5>
+                        <p>Masukkan Text</p>
+                    </div>
+                    <div class="p-3 purple-text-stay">
+                        <h5><Strong>Pendidikan</Strong></h5>
+                        <ul>
+                            <li>History major, univ</li>
+                            <p class="text-secondary">2023</p>
+                        </ul>
+                    </div>
+                    <div class="p-3 purple-text-stay">
+                        <h5><Strong>Pengalaman</Strong></h5>
+                        <p>Masukkan Text</p>
                     </div>
                 </div>
             </div>
