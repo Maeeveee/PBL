@@ -331,3 +331,20 @@ CREATE TABLE Pengalaman (
     FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
 );
 
+-- Menambahkan riwayat pendidikan
+INSERT INTO Pendidikan (NIDN, Universitas, TahunMasuk, TahunLulus) VALUES
+('1234567890', 'University of A', 2000, 2004),
+('1234567890', 'University of B', 2005, 2008),
+('1234567891', 'University of C', 1995, 1999),
+('1234567891', 'University of D', 2000, 2004),
+('1234567892', 'University of E', 2003, 2007),
+('1234567892', 'University of F', 2008, 2012);
+
+-- Menambahkan pengalaman dosen dengan deskripsi yang sesuai
+INSERT INTO Pengalaman (NIDN, Deskripsi) VALUES
+('1234567890', 'World History'),
+('1234567890', 'Philosophy'),
+('1234567891', 'Prehistoric'),
+('1234567891', 'Culture'),
+('1234567892', 'Ancient History'),
+('1234567892', 'World History');
