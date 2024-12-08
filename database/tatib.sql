@@ -230,9 +230,6 @@ ADD Pengalaman VARCHAR(255);
 ALTER TABLE Mahasiswa
 ADD NamaWali VARCHAR(255);
 
-
-use tatib;
-
 DELETE FROM JenisPelanggaran;
 
 -- Nonaktifkan constraint sementara
@@ -311,3 +308,26 @@ DROP COLUMN TugasID;  -- Hapus referensi yang tidak sesuai
 ALTER TABLE Pelanggaran
 ADD TugasID INT,
 FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
+
+ALTER TABLE Dosen
+DROP COLUMN Pengalaman;
+
+ALTER TABLE Dosen
+DROP COLUMN Pendidikan;
+
+CREATE TABLE Pendidikan (
+    PendidikanID INT PRIMARY KEY IDENTITY(1,1),
+    NIDN CHAR(10),
+    Universitas VARCHAR(255),
+    TahunMasuk INT,
+    TahunLulus INT,
+    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
+);
+
+CREATE TABLE Pengalaman (
+    PengalamanID INT PRIMARY KEY IDENTITY(1,1),
+    NIDN CHAR(10),
+    Deskripsi VARCHAR(255),
+    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
+);
+
