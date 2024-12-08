@@ -286,3 +286,6 @@ INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
 
 ALTER TABLE Pelanggaran
 ADD TempatPelanggaran VARCHAR(255);
+
+ALTER TABLE Pelanggaran
+ADD DeskripsiPelanggaran VARCHAR(255);
