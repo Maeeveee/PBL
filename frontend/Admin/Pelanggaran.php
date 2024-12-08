@@ -172,7 +172,6 @@
                         </div>
                     </div>
                     <button onclick="showKlasifikasi()" class="btn text-white purple-card-header">Selanjutnya</button>
-                        <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
                 </div>
             </div>
             
@@ -291,7 +290,6 @@
                 <div class="content-placeholder">
                 <button onclick="showKodeEtik()" class="btn text-white purple-card-header">kembali</button>
                 <button onclick="showSanksi()" class="btn text-white purple-card-header">Selanjutnya</button>
-                <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
                 </div>
             </div> 
 
@@ -373,7 +371,6 @@
                 </div>
                 <div class="content-placeholder">
                     <button onclick="showKlasifikasi()" class="btn text-white purple-card-header">kembali</button>
-                    <a href="formSanksi.php" class="btn text-white purple-card-header">Cetak Surat</a>
                 </div>
 
             </div>

@@ -148,7 +148,8 @@
                                 <label for="deskripsi">Deskripsi Pelanggaran</label>
                                 <textarea class="form-control" id="deskripsi" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
                             </div>
-                            <button type="submit" class="btn text-white purple-card-header">Kirim Bukti</button>
+                            <button type="submit" class="btn text-white purple-card-header">Terima</button>
+                            <button type="submit" class="btn text-white purple-card-header">Tolak</button>                            
                         </div>
                 </div>
              </div>

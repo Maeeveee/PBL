@@ -103,6 +103,7 @@
                                 <th class="purple-text">Kota Asal</th>
                                 <th class="purple-text">Kontak</th>
                                 <th class="purple-text">Kelas</th>
+                                <th class="purple-text-stay">Status</th>
                             </tr>
                         </thead>
                         <tbody id="table-body" style="line-height: 2.5;">
@@ -116,6 +117,9 @@
                                         <td class="low-pixel-hide">Surabaya</td>
                                         <td class="low-pixel-hide">08123456789</td>
                                         <td class="low-pixel-hide">TI-2F</td>
+                                        <td>
+                                            <a href="formSanksi.php"><button class="btn purple-card-header text-white">Detail</button></a>
+                                        </td>
                                     </tr>`;
                                     document.getElementById("table-body").innerHTML += tableData;
                                 }
