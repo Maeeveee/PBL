@@ -214,3 +214,18 @@ EXEC GetTopMahasiswaPelanggar @TopN = 5;
 
 ALTER TABLE Pelanggaran
 ADD FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
+
+ALTER TABLE DetailPelanggaran
+DROP COLUMN Poin;
+
+ALTER TABLE DetailPelanggaran
+DROP COLUMN Tgl;
+
+ALTER TABLE Dosen
+ADD Pendidikan VARCHAR(255);
+
+ALTER TABLE Dosen
+ADD Pengalaman VARCHAR(255);
+
+ALTER TABLE Mahasiswa
+ADD NamaWali VARCHAR(255);
