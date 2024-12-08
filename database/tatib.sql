@@ -289,3 +289,25 @@ ADD TempatPelanggaran VARCHAR(255);
 
 ALTER TABLE Pelanggaran
 ADD DeskripsiPelanggaran VARCHAR(255);
+
+ALTER TABLE Pelanggaran
+DROP CONSTRAINT FK__Pelanggar__Admin__52593CB8;
+
+ALTER TABLE Pelanggaran
+DROP COLUMN Admin;
+
+ALTER TABLE Pelanggaran
+ADD AdminID INT;
+ALTER TABLE Pelanggaran
+ADD FOREIGN KEY (AdminID) REFERENCES Admin(AdminID);
+
+
+ALTER TABLE Pelanggaran
+DROP CONSTRAINT FK__Pelanggar__Tugas__797309D9;
+
+ALTER TABLE Pelanggaran
+DROP COLUMN TugasID;  -- Hapus referensi yang tidak sesuai
+
+ALTER TABLE Pelanggaran
+ADD TugasID INT,
+FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
