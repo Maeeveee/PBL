@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <!-- Sidebar -->
+            <!-- Sidebar-->
             <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
@@ -31,13 +31,19 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
-                            <a href="Formulir.php" class="align-middle">
+                            <a href="Mahasiswa.php" class="align-middle">
                                 <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-white">
-                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Formulir</strong></span>
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Mahasiswa</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
-                            <a href="PolinemaToday.php" class="align-middle bg-white">
+                            <a href="Dosen.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Dosen</strong></span>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center list-space">
+                            <a href="polinemaToday.php" class="align-middle bg-white">
                                 <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-purple">
                                 <span class="ms-1 d-none d-sm-inline purple-text"><strong>PolinemaToday</strong></span>
                             </a>
@@ -75,32 +81,26 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>PolinemaToday</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Mahasiswa</h5>
-                        <p>Mahasiswa</p>
+                        <h5>Nama Admin</h5>
+                        <p>Admin</p>
                     </div>
                 </div>
 
                 <div class="p-3 bg-white rounded content-placeholder">
-                    <div id="tampilBerita"></div>
-                    <div>
-                        <script>
-                            for (let index = 0; index < 7; index++) {
-                                let berita = `
-                                    <div class="p-3 d-flex align-items-center gap-3">
-                                        <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                        <div>
-                                            <a href="ViewPolinemaToday.php" style="text-decoration: none;"><p style="color: #cbc6eb;"><strong>Minggu</strong></p>
-                                            <h5 style="color: #483D8B;"><strong>Pembaruan fasilitas kampus</strong></h5></a>                          
-                                        </div>
-                                    </div>
-                                    `;
-                                    document.getElementById("tampilBerita").innerHTML += berita;
-                            }
-                        </script>
+                    <div class="d-flex p-3 gap-3">
+                        <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="profile-pict">
+                        <div class="d-flex flex-column">
+                            <h5 class="purple-text-stay">Judul Berita</h5>
+                            <p class="text-secondary">tanggal</p>
+                            <p class="text-secondary">deskripsi berita disini</p>
+                        </div>
+                    </div>
+                    <div class="d-flex p-3 gap-3 flex-column">
+                        <h5 class="purple-text-stay">Berita</h5>
+                        <p class="text-secondary">Isi berita</p>
                     </div>
                 </div>
             </div>
-            
         </div>
     </div>
 </body>

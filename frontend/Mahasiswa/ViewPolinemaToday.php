@@ -81,22 +81,17 @@
                 </div>
 
                 <div class="p-3 bg-white rounded content-placeholder">
-                    <div id="tampilBerita"></div>
-                    <div>
-                        <script>
-                            for (let index = 0; index < 7; index++) {
-                                let berita = `
-                                    <div class="p-3 d-flex align-items-center gap-3">
-                                        <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-thumbnail" style="height: 100px; width: 100px;">
-                                        <div>
-                                            <a href="ViewPolinemaToday.php" style="text-decoration: none;"><p style="color: #cbc6eb;"><strong>Minggu</strong></p>
-                                            <h5 style="color: #483D8B;"><strong>Pembaruan fasilitas kampus</strong></h5></a>                          
-                                        </div>
-                                    </div>
-                                    `;
-                                    document.getElementById("tampilBerita").innerHTML += berita;
-                            }
-                        </script>
+                    <div class="d-flex p-3 gap-3">
+                        <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="profile-pict">
+                        <div class="d-flex flex-column">
+                            <h5 class="purple-text-stay">Judul Berita</h5>
+                            <p class="text-secondary">tanggal</p>
+                            <p class="text-secondary">deskripsi berita disini</p>
+                        </div>
+                    </div>
+                    <div class="d-flex p-3 gap-3 flex-column">
+                        <h5 class="purple-text-stay">Berita</h5>
+                        <p class="text-secondary">Isi berita</p>
                     </div>
                 </div>
             </div>
