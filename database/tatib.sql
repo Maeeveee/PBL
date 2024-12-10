@@ -119,6 +119,78 @@ CREATE TABLE Pengalaman (
     FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
 );
 
+CREATE TRIGGER before_insert_users
+ON Users
+AFTER INSERT
+AS
+BEGIN
+    UPDATE U
+    SET U.Username = CASE 
+        WHEN I.Role = 'Mahasiswa' THEN I.NIM
+        WHEN I.Role = 'Dosen' THEN I.NIDN
+        WHEN I.Role = 'Admin' THEN CAST(I.AdminID AS VARCHAR)
+    END
+    FROM Users U
+    INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
+END;
+
+CREATE TRIGGER SetAdminID
+ON PolinemaToday
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @AdminID INT;
+    -- Dapatkan AdminID berdasarkan sesi atau pengguna yang sedang login
+    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
+
+    -- Masukkan data dengan AdminID yang terisi otomatis
+    INSERT INTO PolinemaToday (Judul, Isi, TglDibuat, Thumbnail, AdminID)
+    SELECT Judul, Isi, TglDibuat, Thumbnail, @AdminID
+    FROM INSERTED;
+END;
+
+CREATE TRIGGER after_update_pelanggaran_status
+ON Pelanggaran
+AFTER UPDATE
+AS
+BEGIN
+    DECLARE @Status VARCHAR(20);
+    DECLARE @PelanggaranID INT;
+    DECLARE @AdminID INT;
+
+    -- Ambil status dan pelanggaran ID dari baris yang baru diupdate
+    SELECT @Status = Status, @PelanggaranID = PelanggaranID
+    FROM INSERTED;
+
+    -- Ambil AdminID yang melakukan update dari Users
+    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
+
+    -- Jika status diubah menjadi 'Selesai', lakukan tindakan tambahan
+    IF @Status = 'Selesai'
+    BEGIN
+        -- Mengirim notifikasi dengan AdminID yang sesuai
+        INSERT INTO Notifikasi (Judul, Isi, UsersID, AdminID)
+        VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
+    END;
+END;
+
+-- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
+CREATE PROCEDURE GetTopMahasiswaPelanggar
+    @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
+AS
+BEGIN
+    SELECT TOP (@TopN)
+        M.NIM,
+        M.Nama,
+        COUNT(P.PelanggaranID) AS JumlahPelanggaran
+    FROM Mahasiswa M
+    LEFT JOIN Pelanggaran P ON M.NIM = P.NIM
+    GROUP BY M.NIM, M.Nama
+    ORDER BY COUNT(P.PelanggaranID) DESC;
+END;
+
+EXEC GetTopMahasiswaPelanggar @TopN = 5;
+
 INSERT INTO ProgramStudi (ProdiID, Prodi) VALUES
 (1, 'D-IV Teknik Informatika'),
 (2, 'D-IV Sistem Informasi Bisnis'),
@@ -204,75 +276,3 @@ INSERT INTO Pengalaman (NIDN, Deskripsi) VALUES
 ('1234567891', 'Culture'),
 ('1234567892', 'Ancient History'),
 ('1234567892', 'World History');
-
-CREATE TRIGGER before_insert_users
-ON Users
-AFTER INSERT
-AS
-BEGIN
-    UPDATE U
-    SET U.Username = CASE 
-        WHEN I.Role = 'Mahasiswa' THEN I.NIM
-        WHEN I.Role = 'Dosen' THEN I.NIDN
-        WHEN I.Role = 'Admin' THEN CAST(I.AdminID AS VARCHAR)
-    END
-    FROM Users U
-    INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
-END;
-
-CREATE TRIGGER SetAdminID
-ON PolinemaToday
-INSTEAD OF INSERT
-AS
-BEGIN
-    DECLARE @AdminID INT;
-    -- Dapatkan AdminID berdasarkan sesi atau pengguna yang sedang login
-    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
-
-    -- Masukkan data dengan AdminID yang terisi otomatis
-    INSERT INTO PolinemaToday (Judul, Isi, TglDibuat, Thumbnail, AdminID)
-    SELECT Judul, Isi, TglDibuat, Thumbnail, @AdminID
-    FROM INSERTED;
-END;
-
-CREATE TRIGGER after_update_pelanggaran_status
-ON Pelanggaran
-AFTER UPDATE
-AS
-BEGIN
-    DECLARE @Status VARCHAR(20);
-    DECLARE @PelanggaranID INT;
-    DECLARE @AdminID INT;
-
-    -- Ambil status dan pelanggaran ID dari baris yang baru diupdate
-    SELECT @Status = Status, @PelanggaranID = PelanggaranID
-    FROM INSERTED;
-
-    -- Ambil AdminID yang melakukan update dari Users
-    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
-
-    -- Jika status diubah menjadi 'Selesai', lakukan tindakan tambahan
-    IF @Status = 'Selesai'
-    BEGIN
-        -- Mengirim notifikasi dengan AdminID yang sesuai
-        INSERT INTO Notifikasi (Judul, Isi, UsersID, AdminID)
-        VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
-    END;
-END;
-
--- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
-CREATE PROCEDURE GetTopMahasiswaPelanggar
-    @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
-AS
-BEGIN
-    SELECT TOP (@TopN)
-        M.NIM,
-        M.Nama,
-        COUNT(P.PelanggaranID) AS JumlahPelanggaran
-    FROM Mahasiswa M
-    LEFT JOIN Pelanggaran P ON M.NIM = P.NIM
-    GROUP BY M.NIM, M.Nama
-    ORDER BY COUNT(P.PelanggaranID) DESC;
-END;
-
-EXEC GetTopMahasiswaPelanggar @TopN = 5;
