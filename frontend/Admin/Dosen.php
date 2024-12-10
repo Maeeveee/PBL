@@ -159,7 +159,7 @@ try {
                         <div class="card p-3 d-flex align-items-center m-3" style="width: 18rem;">
                             <img src="/myWeb/PBL/frontend/img/roundProfile.png" class="card-img-top" alt="" style="height:100px; width: 100px;">
                             <div class="card-body text-center">
-                                <a href="ViewDosen.php"><p class="purple-text-stay"><strong><?php echo $dosen['Nama']; ?></strong></p></a>
+                                <a href="ViewDosen.php" style="text-decoration: none;"><p class="purple-text-stay"><strong><?php echo $dosen['Nama']; ?></strong></p></a>
                                 <p class="text-secondary"><?php echo $dosen['Email']; ?></p>
                             </div>
                         </div>
