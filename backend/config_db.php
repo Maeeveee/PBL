@@ -1,6 +1,6 @@
 <?php
-$serverName = "RAFI"; 
-$database = "tatib";          
+$serverName = "DESKTOP-EJS5FCV"; 
+$database = "tatiba";          
 $username = "";                  
 $password = "";                  
 
