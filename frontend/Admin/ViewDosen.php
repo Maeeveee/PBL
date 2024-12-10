@@ -2,56 +2,45 @@
 session_start();
 include '../../backend/config_db.php';
 
-//user login sebagai admin
+// Cek apakah user sudah login sebagai dosen
 if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
 }
 
-// Ambil parameter pencarian
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-
-try {
-    // Query untuk menampilkan semua dosen jika tidak ada pencarian
-    if (empty($search)) {
-        $query = "SELECT * FROM Dosen";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-    } else {
-        // Query dengan kondisi pencarian
-        $query = "SELECT * FROM Dosen WHERE Nama LIKE :search OR Email LIKE :search";
-        $stmt = $conn->prepare($query);
-        $searchParam = "%$search%";
-        $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
-        $stmt->execute();
-    }
-
-    $dosenList = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    // Tangani error dengan baik
-    echo "Error: " . $e->getMessage();
-    exit();
-}
 $username = $_SESSION['username'];
 
 try {
-    // Query untuk mendapatkan informasi admin berdasarkan username
-    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
-            FROM Admin A
-            INNER JOIN Users U ON A.AdminID = U.AdminID
+    // Query untuk mendapatkan informasi dosen berdasarkan username
+    $sql = "SELECT A.NIDN, A.Nama, A.Email, A.NoTelepon
+            FROM Dosen A
+            INNER JOIN Users U ON A.NIDN = U.NIDN
             WHERE U.Username = :username";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
 
     // Ambil hasil query
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    $dosen = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Jika data admin tidak ditemukan
-    if (!$admin) {
-        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    // Jika data dosen tidak ditemukan
+    if (!$dosen) {
+        $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
     }
 
+    // Query untuk mendapatkan data pendidikan dosen
+    $sqlPendidikan = "SELECT Universitas, TahunMasuk, TahunLulus FROM Pendidikan WHERE NIDN = :NIDN";
+    $stmtPendidikan = $conn->prepare($sqlPendidikan);
+    $stmtPendidikan->bindParam(':NIDN', $dosen['NIDN'], PDO::PARAM_STR);
+    $stmtPendidikan->execute();
+    $pendidikan = $stmtPendidikan->fetchAll(PDO::FETCH_ASSOC);
+
+    // Query untuk mendapatkan data pengalaman dosen
+    $sqlPengalaman = "SELECT Deskripsi FROM Pengalaman WHERE NIDN = :NIDN";
+    $stmtPengalaman = $conn->prepare($sqlPengalaman);
+    $stmtPengalaman->bindParam(':NIDN', $dosen['NIDN'], PDO::PARAM_STR);
+    $stmtPengalaman->execute();
+    $pengalaman = $stmtPengalaman->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
@@ -73,7 +62,7 @@ try {
     <div class="container-fluid">
         <div class="row">
 
-            <!-- Sidebar-->
+            <!-- Sidebar -->
             <div class="sidebar">
                 <div class="d-flex flex-column align-items-center">
                     <div class="d-flex align-items-center">
@@ -96,7 +85,7 @@ try {
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
-                            <a href="#" class="align-middle bg-white">
+                            <a href="Dosen.php" class="align-middle bg-white">
                                 <img src="/myWeb/PBL/frontend/img/teacher.svg" alt="" class="img-purple">
                                 <span class="ms-1 d-none d-sm-inline purple-text"><strong>Dosen</strong></span>
                             </a>
@@ -138,34 +127,47 @@ try {
             <!-- Main Content -->
             <div class="col-12 offset-md-3 offset-xl-2 main-content">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="purple-text title-font"><strong>Dosen</strong></h1>
+                    <h1 class="purple-text title-font"><strong>Profile</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
-                        <p>Admin</p>
+                        <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
+                        <p>Dosen</p>
                     </div>
                 </div>
 
-                <!-- Form cari -->
-                <div class="p-3 content-placeholder">
-                    <form method="GET" action="Dosen.php">
-                        <input type="text" name="search" placeholder="Cari.." class="form-control" style="width: 25%;">
-                        <button type="submit" class="btn btn-primary mt-2">Cari</button>
-                    </form>
-                </div>
-
-                <!-- Tampil Dosen -->
-                <div class="d-flex flex-wrap content-placeholder" id="cardDosen">
-                    <?php foreach ($dosenList as $dosen): ?>
-                        <div class="card p-3 d-flex align-items-center m-3" style="width: 18rem;">
-                            <img src="/myWeb/PBL/frontend/img/roundProfile.png" class="card-img-top" alt="" style="height:100px; width: 100px;">
-                            <div class="card-body text-center">
-                                <a href="ViewDosen.php"><p class="purple-text-stay"><strong><?php echo $dosen['Nama']; ?></strong></p></a>
-                                <p class="text-secondary"><?php echo $dosen['Email']; ?></p>
-                            </div>
+                <!-- Profile -->
+                <div class="p-3 bg-white rounded d-flex flex-column content-placeholder content-placeholder-mid">
+                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
+                    <div class=" d-flex align-items-center justify-content-between">
+                        <div class="p-3 purple-text-stay">
+                            <h5><Strong>Rizal Abrar</Strong></h5>
+                            <p>Dosen</p>
                         </div>
-                    <?php endforeach; ?>
+                        <div>
+                            <p class="purple-text">HP: <?php echo htmlspecialchars($dosen['NoTelepon']); ?></p>
+                        </div>
+                        <div>
+                            <p class="purple-text">Email: <?php echo htmlspecialchars($dosen['Email']); ?></p>
+                        </div>
+                    </div>
+                    <div class="p-3 purple-text-stay">
+                        <h5><Strong>Pendidikan</Strong></h5>
+                        <ul>
+                            <?php foreach ($pendidikan as $pendidikanItem): ?>
+                                <li><?php echo htmlspecialchars($pendidikanItem['Universitas']); ?>, <?php echo htmlspecialchars($pendidikanItem['TahunMasuk']); ?> - <?php echo htmlspecialchars($pendidikanItem['TahunLulus']); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div class="p-3 purple-text-stay">
+                        <h5><Strong>Pengalaman</Strong></h5>
+                        <ul>
+                            <?php foreach ($pengalaman as $pengalamanItem): ?>
+                                <li><?php echo htmlspecialchars($pengalamanItem['Deskripsi']); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </body>
