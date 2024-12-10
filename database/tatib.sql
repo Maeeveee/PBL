@@ -174,6 +174,24 @@ BEGIN
     END;
 END;
 
+CREATE TRIGGER after_insert_pelanggaran
+ON Pelanggaran
+AFTER INSERT
+AS
+BEGIN
+    -- Deklarasi variabel untuk NIM dan PelanggaranID
+    DECLARE @NIM CHAR(12);
+    DECLARE @PelanggaranID INT;
+
+    -- Ambil NIM dan PelanggaranID dari baris yang baru dimasukkan
+    SELECT @NIM = NIM, @PelanggaranID = PelanggaranID
+    FROM INSERTED;
+
+    -- Masukkan data ke dalam tabel DetailPelanggaran
+    INSERT INTO DetailPelanggaran (NIM, PelanggaranID)
+    VALUES (@NIM, @PelanggaranID);
+END;
+
 -- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
 CREATE PROCEDURE GetTopMahasiswaPelanggar
     @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
