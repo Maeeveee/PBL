@@ -1,3 +1,46 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+// Check if user is logged in as dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+// Query to get student information based on NIM
+$queryMahasiswa = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, p.Prodi
+                   FROM Mahasiswa m
+                   INNER JOIN ProgramStudi p ON m.ProdiID = p.ProdiID
+                   WHERE m.NIM = :nim"; // Assuming session stores NIM
+$stmtMahasiswa = $conn->prepare($queryMahasiswa);
+$stmtMahasiswa->bindParam(':nim', $username, PDO::PARAM_STR);
+$stmtMahasiswa->execute();
+
+// Fetch result
+$mahasiswa = $stmtMahasiswa->fetch(PDO::FETCH_ASSOC);
+
+// If no student data found, set default placeholder data
+if (!$mahasiswa) {
+    $mahasiswa = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia', 'Prodi' => 'Data tidak tersedia'];
+}
+
+// Query to get violation history for the logged-in student
+$queryViolations = "SELECT p.PelanggaranID, jp.NamaPelanggaran, p.TanggalPelanggaran, p.TempatPelanggaran, p.DeskripsiPelanggaran
+                    FROM Pelanggaran p
+                    INNER JOIN JenisPelanggaran jp ON p.JenisID = jp.JenisID
+                    WHERE p.NIM = :nim
+                    ORDER BY p.TanggalPelanggaran DESC"; // Order by date
+$stmtViolations = $conn->prepare($queryViolations);
+$stmtViolations->bindParam(':nim', $username, PDO::PARAM_STR);
+$stmtViolations->execute();
+
+// Fetch results
+$violations = $stmtViolations->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -76,11 +119,11 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Mahasiswa</h5>
-                        <p>Mahasiswa</p>
+                        <h5><?php echo $mahasiswa['Nama']; ?></h5>
+                        <p><?php echo $mahasiswa['Prodi']; ?></p>
                     </div>
                 </div>
-                
+
                 <!-- Kalender -->
                 <div class="d-flex justify-content-center middle-gap">
                     <!-- Kalender -->
@@ -164,32 +207,47 @@
                 <!-- Leaderboard Pelanggar -->
                 <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
                     <h4 style="color: #483D8B;"><strong>Riwayat Pelanggaran</strong></h4>
-                    <div id="leaderboard"></div>
-                    <script>
-                        for (let index = 0; index < 5; index++) {
-                            let tampilLeaderboard = `
-                            <div class="p-3 d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-5">
-                                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="img-sidebar">
-                                    <p><strong>Rizal Abrar Fahmi</strong></p>
+                    <div id="leaderboard">
+                        <?php if (count($violations) > 0): ?>
+                            <?php foreach ($violations as $violation): ?>
+                                <div class="p-2 d-flex justify-content-between align-items-center border-bottom">
+                                    <div class="d-flex align-items-center">
+                                        <?php
+                                        // Gunakan null coalescing operator untuk menghindari nilai null
+                                        $fotoPelanggaran = htmlspecialchars($violation['FotoPelanggaran'] ?? 'default.jpg'); // Gambar default jika null
+                                        $namaPelanggaran = htmlspecialchars($violation['NamaPelanggaran'] ?? 'Unknown');
+                                        $tanggalPelanggaran = htmlspecialchars($violation['TanggalPelanggaran'] ?? 'Unknown date');
+                                        $tempatPelanggaran = htmlspecialchars($violation['TempatPelanggaran'] ?? 'Unknown place');
+
+                                        // Path relatif untuk gambar
+                                        $imagePath = "/myWeb/PBL/upload/FilePelanggaran/$fotoPelanggaran";
+
+                                        // Periksa apakah file ada di server
+                                        $fullPath = $_SERVER['DOCUMENT_ROOT'] . $imagePath;
+                                        if (!file_exists($fullPath)) {
+                                            $imagePath = "/myWeb/PBL/upload/FilePelanggaran/default.jpg"; // Gambar default
+                                        }
+                                        ?>
+                                        <a href="<?php echo $imagePath; ?>" target="_blank">
+                                            <img src="<?php echo $imagePath; ?>" alt="Bukti Foto" class="img-sidebar" style="width: 40px; height: 40px; cursor: pointer;">
+                                        </a>
+                                        <div class="ms-2">
+                                            <p class="mb-0"><strong><?php echo $namaPelanggaran; ?></strong></p>
+                                            <p class="mb-0 text-muted" style="font-size: 0.9em;"><?php echo $tanggalPelanggaran; ?></p>
+                                            <p class="mb-0" style="font-size: 0.9em;"><?php echo $tempatPelanggaran; ?></p>
+                                        </div>
+                                    </div>
+                                    <a href="Formulir.php?id=<?php echo htmlspecialchars($violation['PelanggaranID'] ?? ''); ?>" class="btn btn-link" style="color: #483D8B; text-decoration: none;">Print</a>
                                 </div>
-                                <p class="low-pixel-hide">Tempat nim</p>
-                                <div class="d-flex low-pixel-hide">
-                                    <p>
-                                        kelas<br>
-                                        TI 2F
-                                    </p>
-                                </div>
-                                <p class="low-pixel-hide"><Strong>I</Strong></p>   
-                                <a href="Formulir.php" class="btn" style="color: #483D8B;">Print</a>
-                            </div>
-                            `;
-                            document.getElementById("leaderboard").innerHTML += tampilLeaderboard;
-                        }
-                    </script>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Tidak ada riwayat pelanggaran.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

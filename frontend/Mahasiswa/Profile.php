@@ -1,3 +1,38 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+// User login check (assuming 'username' in session refers to the student's NIM)
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username']; // NIM from session
+
+// Query to get student information based on NIM
+$query = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, p.Prodi
+          FROM Mahasiswa m
+          INNER JOIN ProgramStudi p ON m.ProdiID = p.ProdiID
+          WHERE m.NIM = :username"; // Assuming session stores NIM
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+$stmt->execute();
+
+// Fetch result
+$mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// If no student data found, use default placeholder data
+if (!$mahasiswa) {
+    $mahasiswa = [
+        'Nama' => 'Data tidak tersedia', 
+        'Email' => 'Data tidak tersedia', 
+        'NoTelepon' => 'Data tidak tersedia', 
+        'Prodi' => 'Data tidak tersedia'
+    ];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +62,7 @@
                         <li class="nav-item d-flex align-items-center list-space">
                             <a href="Dashboard.php" class="align-middle">
                                 <img src="/myWeb/PBL/frontend/img/home.svg" alt="Home Icon" class="img-white">
-                                <span class="ms-1 d-none d-sm-inline white-text"><Strong>Beranda</Strong></span>
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Beranda</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
@@ -75,24 +110,24 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Profile</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Mahasiswa</h5>
-                        <p>Mahasiswa</p>
+                        <h5><?php echo htmlspecialchars($mahasiswa['Nama']); ?></h5>
+                        <p><?php echo htmlspecialchars($mahasiswa['Prodi']); ?></p>
                     </div>
                 </div>
 
-                <!-- Profile -->
+                <!-- Profile Section -->
                 <div class="p-3 bg-white rounded d-flex flex-column content-placeholder content-placeholder-mid">
-                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
-                    <div class=" d-flex align-items-center justify-content-between">
+                    <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="Profile Picture" class="profile-pict">
+                    <div class="d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
-                            <h5>Rizal Abrar</h5>
+                            <h5><?php echo htmlspecialchars($mahasiswa['Nama']); ?></h5>
                             <p>Mahasiswa</p>
                         </div>
                         <div>
-                            <p class="purple-text">HP: 08123456789</p>
+                            <p class="purple-text">HP: <?php echo htmlspecialchars($mahasiswa['NoTelepon']); ?></p>
                         </div>
                         <div>
-                            <p class="purple-text">Email: 7AqgB@example.com</p>
+                            <p class="purple-text">Email: <?php echo htmlspecialchars($mahasiswa['Email']); ?></p>
                         </div>
                     </div>
                 </div>
