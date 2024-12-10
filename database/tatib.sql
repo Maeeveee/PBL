@@ -1,6 +1,11 @@
-create database tatib;
+create database tatiba;
 
-use tatib;
+use tatiba;
+
+CREATE TABLE ProgramStudi (
+	ProdiID INT PRIMARY KEY NOT NULL,
+	Prodi VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE Mahasiswa (
     NIM CHAR(12) PRIMARY KEY,
@@ -9,8 +14,9 @@ CREATE TABLE Mahasiswa (
     NoTelepon VARCHAR(15),
     Alamat VARCHAR(255),
     TanggalLahir DATE,
+    NamaWali VARCHAR(255),
     Poin INT DEFAULT 0,
-	ProdiID INT FOREIGN KEY REFERENCES ProgramStudi(ProdiID)
+	ProdiID INT FOREIGN KEY REFERENCES ProgramStudi(ProdiID),
 );
 
 CREATE TABLE Dosen (
@@ -27,41 +33,23 @@ CREATE TABLE Admin (
     NoTelepon VARCHAR(15),
 );
 
-CREATE TABLE ProgramStudi (
-	ProdiID INT PRIMARY KEY NOT NULL,
-	Prodi VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE Users (
-	UsersID int PRIMARY KEY IDENTITY(1,1),
+	UsersID INT PRIMARY KEY IDENTITY(1,1),
     Username VARCHAR(50),
 	Password VARCHAR(255) NOT NULL,
     Role VARCHAR(20) CHECK (Role IN ('Mahasiswa', 'Dosen', 'Admin')) NOT NULL,
 	NIDN CHAR(10),
-	AdminID INT,
+    AdminID INT,  
+    NIM CHAR(12),  
     FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN) ON DELETE CASCADE,
-	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID) ON DELETE CASCADE
+	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID) ON DELETE CASCADE,
+    FOREIGN KEY (NIM) REFERENCES Mahasiswa(NIM) ON DELETE CASCADE
 );
 
 CREATE TABLE JenisPelanggaran (
     JenisID INT PRIMARY KEY IDENTITY(1,1),
-    NamaPelanggaran VARCHAR(100),
+    NamaPelanggaran VARCHAR(MAX),
     Tingkat CHAR(3)
-);
-
-CREATE TABLE Pelanggaran (
-    PelanggaranID INT PRIMARY KEY IDENTITY(1,1),
-    NIM CHAR(12) FOREIGN KEY REFERENCES Mahasiswa(NIM),
-    NIDN CHAR(10) FOREIGN KEY REFERENCES Dosen(NIDN),
-    JenisID INT FOREIGN KEY REFERENCES JenisPelanggaran(JenisID),
-    TanggalPelanggaran DATE NOT NULL,
-    BuktiFoto VARCHAR(255),
-	Surat VARCHAR(255),
-	Status VARCHAR(20) DEFAULT 'Pending',
-	AdminID int,
-	Admin int FOREIGN KEY REFERENCES Admin(AdminID),
-    TugasID INT,
-    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID)
 );
 
 CREATE TABLE Tugas (
@@ -70,18 +58,29 @@ CREATE TABLE Tugas (
 	TanggalDibuat DATE,
     TanggalSelesai DATE,
 	NIDN CHAR(10),
-	NIM CHAR(12),
-    TugasID INT,
-    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID),
 	FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN) ON DELETE CASCADE,
-    FOREIGN KEY (NIM) REFERENCES Mahasiswa(NIM) ON DELETE CASCADE
+);
+
+CREATE TABLE Pelanggaran (
+    PelanggaranID INT PRIMARY KEY IDENTITY(1,1),
+    NIM CHAR(12) FOREIGN KEY REFERENCES Mahasiswa(NIM),
+    NIDN CHAR(10) FOREIGN KEY REFERENCES Dosen(NIDN),
+    JenisID INT FOREIGN KEY REFERENCES JenisPelanggaran(JenisID),
+    TanggalPelanggaran DATE NOT NULL,
+    TempatPelanggaran VARCHAR(255) NOT NULL,
+    BuktiFoto VARCHAR(255),
+    DeskripsiPelanggaran VARCHAR(255),
+	Surat VARCHAR(255),
+	Status VARCHAR(20) DEFAULT 'Pending',
+	AdminID INT,
+	Admin INT FOREIGN KEY REFERENCES Admin(AdminID),
+    TugasID INT,
+    FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID)
 );
 
 CREATE TABLE DetailPelanggaran (
 	NIM CHAR(12) FOREIGN KEY REFERENCES Mahasiswa(NIM),
 	PelanggaranID INT FOREIGN KEY REFERENCES Pelanggaran(PelanggaranID),
-	Poin INT,
-	Tgl Date
 );
 
 CREATE TABLE Notifikasi (
@@ -92,6 +91,32 @@ CREATE TABLE Notifikasi (
 	AdminID int,
     FOREIGN KEY (UsersID) REFERENCES Users(UsersID),
 	FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
+);
+
+CREATE TABLE PolinemaToday (
+    BeritaID INT PRIMARY KEY IDENTITY(1,1),
+    Judul VARCHAR(255) NOT NULL,
+    Isi TEXT NOT NULL,
+    TglDibuat DATETIME NOT NULL,
+    Thumbnail VARCHAR(255),
+    AdminID INT,
+    FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
+);
+
+CREATE TABLE Pendidikan (
+    PendidikanID INT PRIMARY KEY IDENTITY(1,1),
+    NIDN CHAR(10),
+    Universitas VARCHAR(255),
+    TahunMasuk INT,
+    TahunLulus INT,
+    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
+);
+
+CREATE TABLE Pengalaman (
+    PengalamanID INT PRIMARY KEY IDENTITY(1,1),
+    NIDN CHAR(10),
+    Deskripsi VARCHAR(255),
+    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
 );
 
 CREATE TRIGGER before_insert_users
@@ -108,52 +133,6 @@ BEGIN
     FROM Users U
     INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
 END;
-
-INSERT INTO ProgramStudi (ProdiID, Prodi) VALUES
-(1, 'D-IV Teknik Informatika'),
-(2, 'D-IV Sistem Informasi Bisnis'),
-(3, 'D-II PPLS');
-
-INSERT INTO Mahasiswa (NIM, Nama, Email, NoTelepon, Alamat, TanggalLahir, Poin, ProdiID) VALUES
-('210123456789', 'Ahmad Rizky', 'ahmadrizky@email.com', '081234567890', 'Malang', '2000-01-01', 100, 1),  
-('210123456790', 'Budi Santoso', 'budi@email.com', '081234567891', 'Surabaya', '2000-02-01', 80, 2),   
-('210123456791', 'Citra Dewi', 'citra@email.com', '081234567892', 'Kediri', '2000-03-01', 90, 3);   
-
-INSERT INTO Dosen (NIDN, Nama, Email, NoTelepon) VALUES
-('1234567890', 'Dr. John Doe', 'john.doe@university.com', '082345678901'),
-('1234567891', 'Prof. Jane Smith', 'jane.smith@university.com', '082345678902'),
-('1234567892', 'Dr. Mark Brown', 'mark.brown@university.com', '082345678903');
-
-INSERT INTO Admin (AdminID, NamaAdmin, EmailAdmin, NoTelepon) VALUES
-(1234, 'Admin A', 'admina@university.com', '083456789000'),
-(6789, 'Admin B', 'adminb@university.com', '083456789001');
-
-INSERT INTO Users (Username, Password, Role, NIM, NIDN, AdminID) VALUES
-(NULL, 'password123', 'Mahasiswa', '210123456789', NULL, NULL),  
-(NULL, 'password123', 'Mahasiswa', '210123456790', NULL, NULL),
-(NULL, 'password123', 'Mahasiswa', '210123456791', NULL, NULL), 
-(NULL, 'password123', 'Dosen', NULL, '1234567890', NULL), 
-(NULL, 'password123', 'Dosen', NULL, '1234567891', NULL), 
-(NULL, 'password123', 'Dosen', NULL, '1234567892', NULL),  
-(NULL, 'adminpass', 'Admin', NULL, NULL, 1234), 
-(NULL, 'adminpass', 'Admin', NULL, NULL, 6789);
-
-INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
-('Pelanggaran Ringan', 'I'),
-('Pelanggaran Sedang', 'II'),
-('Pelanggaran Berat', 'III'),
-('Pelanggaran Sangat Berat', 'IV'),
-('Pelanggaran Fatal', 'V');
-
-CREATE TABLE PolinemaToday (
-    BeritaID INT PRIMARY KEY IDENTITY(1,1),
-    Judul VARCHAR(255) NOT NULL,
-    Isi TEXT NOT NULL,
-    TglDibuat DATETIME NOT NULL,
-    Thumbnail VARCHAR(255),
-    AdminID INT,
-    FOREIGN KEY (AdminID) REFERENCES Admin(AdminID)
-);
 
 CREATE TRIGGER SetAdminID
 ON PolinemaToday
@@ -195,6 +174,24 @@ BEGIN
     END;
 END;
 
+CREATE TRIGGER after_insert_pelanggaran
+ON Pelanggaran
+AFTER INSERT
+AS
+BEGIN
+    -- Deklarasi variabel untuk NIM dan PelanggaranID
+    DECLARE @NIM CHAR(12);
+    DECLARE @PelanggaranID INT;
+
+    -- Ambil NIM dan PelanggaranID dari baris yang baru dimasukkan
+    SELECT @NIM = NIM, @PelanggaranID = PelanggaranID
+    FROM INSERTED;
+
+    -- Masukkan data ke dalam tabel DetailPelanggaran
+    INSERT INTO DetailPelanggaran (NIM, PelanggaranID)
+    VALUES (@NIM, @PelanggaranID);
+END;
+
 -- STORE PROCEDURE MENAMPILKAN PELANGGAR TERBANYAK
 CREATE PROCEDURE GetTopMahasiswaPelanggar
     @TopN INT -- Parameter untuk jumlah mahasiswa yang ingin ditampilkan
@@ -212,37 +209,35 @@ END;
 
 EXEC GetTopMahasiswaPelanggar @TopN = 5;
 
-ALTER TABLE Pelanggaran
-ADD FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
+INSERT INTO ProgramStudi (ProdiID, Prodi) VALUES
+(1, 'D-IV Teknik Informatika'),
+(2, 'D-IV Sistem Informasi Bisnis'),
+(3, 'D-II PPLS');
 
-ALTER TABLE DetailPelanggaran
-DROP COLUMN Poin;
+INSERT INTO Mahasiswa (NIM, Nama, Email, NoTelepon, Alamat, TanggalLahir, NamaWali, Poin, ProdiID) VALUES
+('210123456789', 'Ahmad Rizky', 'ahmadrizky@email.com', '081234567890', 'Malang', '2000-01-01', 'Wali Ahmad', 100, 1),
+('210123456790', 'Budi Santoso', 'budi@email.com', '081234567891', 'Surabaya', '2000-02-01', 'Wali Budi', 80, 2),
+('210123456791', 'Citra Dewi', 'citra@email.com', '081234567892', 'Kediri', '2000-03-01', 'Wali Citra', 90, 3);
+  
 
-ALTER TABLE DetailPelanggaran
-DROP COLUMN Tgl;
+INSERT INTO Dosen (NIDN, Nama, Email, NoTelepon) VALUES
+('1234567890', 'Dr. John Doe', 'john.doe@university.com', '082345678901'),
+('1234567891', 'Prof. Jane Smith', 'jane.smith@university.com', '082345678902'),
+('1234567892', 'Dr. Mark Brown', 'mark.brown@university.com', '082345678903');
 
-ALTER TABLE Dosen
-ADD Pendidikan VARCHAR(255);
+INSERT INTO Admin (AdminID, NamaAdmin, EmailAdmin, NoTelepon) VALUES
+(1234, 'Admin A', 'admina@university.com', '083456789000'),
+(6789, 'Admin B', 'adminb@university.com', '083456789001');
 
-ALTER TABLE Dosen
-ADD Pengalaman VARCHAR(255);
-
-ALTER TABLE Mahasiswa
-ADD NamaWali VARCHAR(255);
-
-DELETE FROM JenisPelanggaran;
-
--- Nonaktifkan constraint sementara
-ALTER TABLE Pelanggaran NOCHECK CONSTRAINT FK__Pelanggar__Jenis__5070F446;
-
--- Hapus data di JenisPelanggaran
-DELETE FROM JenisPelanggaran;
-
--- Aktifkan kembali constraint
-ALTER TABLE Pelanggaran CHECK CONSTRAINT FK__Pelanggar__Jenis__5070F446;
-
-ALTER TABLE JenisPelanggaran
-ALTER COLUMN NamaPelanggaran VARCHAR(MAX);
+INSERT INTO Users (Username, Password, Role, NIM, NIDN, AdminID) VALUES
+('210123456789', 'password123', 'Mahasiswa', '210123456789', NULL, NULL),  
+('210123456790', 'password123', 'Mahasiswa', '210123456790', NULL, NULL),
+('210123456791', 'password123', 'Mahasiswa', '210123456791', NULL, NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567890', NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567891', NULL), 
+(NULL, 'password123', 'Dosen', NULL, '1234567892', NULL),  
+(NULL, 'adminpass', 'Admin', NULL, NULL, 1234), 
+(NULL, 'adminpass', 'Admin', NULL, NULL, 6789);
 
 INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
 ('Berkomunikasi dengan tidak sopan, baik tertulis atau tidak tertulis kepada mahasiswa, dosen, karyawan, atau orang lain', 'V'),
@@ -281,55 +276,6 @@ INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
 ('Mengedarkan serta menjual barang-barang psikotropika dan/ atau zat-zat Adiktif lainnya', 'I'),
 ('Terlibat dalam tindakan kriminal dan dinyatakan bersalah oleh Pengadilan', 'I');
 
-ALTER TABLE Pelanggaran
-ADD TempatPelanggaran VARCHAR(255);
-
-ALTER TABLE Pelanggaran
-ADD DeskripsiPelanggaran VARCHAR(255);
-
-ALTER TABLE Pelanggaran
-DROP CONSTRAINT FK__Pelanggar__Admin__52593CB8;
-
-ALTER TABLE Pelanggaran
-DROP COLUMN Admin;
-
-ALTER TABLE Pelanggaran
-ADD AdminID INT;
-ALTER TABLE Pelanggaran
-ADD FOREIGN KEY (AdminID) REFERENCES Admin(AdminID);
-
-
-ALTER TABLE Pelanggaran
-DROP CONSTRAINT FK__Pelanggar__Tugas__797309D9;
-
-ALTER TABLE Pelanggaran
-DROP COLUMN TugasID;  -- Hapus referensi yang tidak sesuai
-
-ALTER TABLE Pelanggaran
-ADD TugasID INT,
-FOREIGN KEY (TugasID) REFERENCES Tugas(TugasID);
-
-ALTER TABLE Dosen
-DROP COLUMN Pengalaman;
-
-ALTER TABLE Dosen
-DROP COLUMN Pendidikan;
-
-CREATE TABLE Pendidikan (
-    PendidikanID INT PRIMARY KEY IDENTITY(1,1),
-    NIDN CHAR(10),
-    Universitas VARCHAR(255),
-    TahunMasuk INT,
-    TahunLulus INT,
-    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
-);
-
-CREATE TABLE Pengalaman (
-    PengalamanID INT PRIMARY KEY IDENTITY(1,1),
-    NIDN CHAR(10),
-    Deskripsi VARCHAR(255),
-    FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN)
-);
 
 -- Menambahkan riwayat pendidikan
 INSERT INTO Pendidikan (NIDN, Universitas, TahunMasuk, TahunLulus) VALUES
