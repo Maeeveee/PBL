@@ -130,13 +130,13 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <!-- Form cari -->
-                <form method="GET" class="d-flex">
+                <form method="GET" class="d-flex content-placeholder">
                         <input type="text" name="search" placeholder="Cari.." value="<?= htmlspecialchars($search) ?>" class="form-control me-2">
                         <button type="submit" class="btn purple-card-header text-white">Cari</button>
                 </form>
 
                 <!-- Tampil Mahasiswa -->
-                <div class="table-responsive mt-3">
+                <div class="table-responsive mt-3 content-placeholder">
                     <table class="table table-bordered table-striped table-hover text-white">
                         <thead>
                             <tr>
