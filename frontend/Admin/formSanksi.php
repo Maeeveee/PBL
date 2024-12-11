@@ -77,7 +77,7 @@
             </div>
 
             <!-- Main Content -->
-             <div  class="col-12 offset-md-3 offset-xl-2 main-content">
+            <div  class="col-12 offset-md-3 offset-xl-2 main-content">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Form Unggahan Sanksi</strong></h1>
                     <div class="d-flex flex-column purple-text">
@@ -131,30 +131,51 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email" placeholder="masukkan email anda" class="form-control">
+                                    <div class="form-group d-flex gap-3">
+                                        <div>
+                                            <label for="poin">Poin</label>
+                                            <input type="text" name="poin" id="poin" placeholder="10" class="form-control">
+                                        </div>
+                                        <div>
+                                            <label for="tingkat">Tingkat</label>
+                                            <input type="text" name="tingkat" id="tingkat" placeholder="3" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Telepon</label>
-                                        <input type="text" name="telepon" id="telepon" placeholder="Masukkan nomor telepon anda" class="form-control">
+                                        <label for="nim">NIM</label>
+                                        <input type="text" name="nim" id="nim" placeholder="Masukkan NIM mahasiswa" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="deskripsi">Deskripsi Pelanggaran</label>
-                                <textarea class="form-control" id="deskripsi" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
+                                <label for="tugas">Tugas Yang Diberikan</label>
+                                <textarea class="form-control" id="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
                             </div>
+                            <button type="submit" id="kirim" class="btn text-white purple-card-header">Kirim surat</button>
                             <button type="submit" class="btn text-white purple-card-header">Terima</button>
                             <button type="submit" class="btn text-white purple-card-header">Tolak</button>                            
-                        </div>
+                    </div>
                 </div>
-             </div>
-
+            </div>
         </div>
     </div>
+    <script>
+        const tingkatInput = document.getElementById("tingkat");
+        const kirim = document.getElementById("kirim");
+
+        kirim.disabled = true;
+
+        tingkatInput.addEventListener("input", function () {
+        const value = parseInt(tingkatInput.value);
+        if (value >= 3 && value <= 5) {
+            kirim.disabled = false;
+        } else {
+            kirim.disabled = true;
+        }
+        });
+    </script>
 </body>
 </html>

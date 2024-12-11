@@ -112,7 +112,7 @@ if (!$mahasiswa) {
 
                 <div class="card mb-4 shadow-sm content-placeholder">
                     <div class="card-header text-white purple-card-header">
-                        <h5 class="mb-0 ">Bukti Penyelesaian Pelanggaran</h5>
+                        <h5 class="mb-0 ">Bukti Melakukan Pelanggaran</h5>
                     </div>
                     <div class=" card-body">
                             <div class="row mb-3">
@@ -155,24 +155,31 @@ if (!$mahasiswa) {
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email" placeholder="masukkan email anda" class="form-control">
+                                    <div class="form-group d-flex gap-3">
+                                        <div>
+                                            <label for="poin">Poin</label>
+                                            <input type="text" name="poin" id="poin" placeholder="10" class="form-control">
+                                        </div>
+                                        <div>
+                                            <label for="tingkat">Tingkat</label>
+                                            <input type="text" name="tingkat" id="tingkat" placeholder="3" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Telepon</label>
-                                        <input type="text" name="telepon" id="telepon" placeholder="Masukkan nomor telepon anda" class="form-control">
+                                        <label for="nim">NIM</label>
+                                        <input type="text" name="nim" id="nim" placeholder="Masukkan NIM mahasiswa" class="form-control">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="deskripsi">Deskripsi Pelanggaran</label>
-                                <textarea class="form-control" id="deskripsi" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
+                                <label for="tugas">Tugas Yang Diberikan</label>
+                                <textarea class="form-control" id="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
                             </div>
-                            <button type="submit" class="btn text-white purple-card-header">Kirim Bukti</button>
+                            <button type="submit" class="btn text-white purple-card-header">Terima</button>
+                            <button type="submit" class="btn text-white purple-card-header">Tolak</button>                            
                         </div>
                 </div>
              </div>

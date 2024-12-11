@@ -149,7 +149,7 @@ try {
                 <div class="p-3 content-placeholder">
                     <form method="GET" action="Dosen.php">
                         <input type="text" name="search" placeholder="Cari.." class="form-control" style="width: 25%;">
-                        <button type="submit" class="btn btn-primary mt-2">Cari</button>
+                        <button type="submit" class="btn purple-card-header text-white mt-2">Cari</button>
                     </form>
                 </div>
 

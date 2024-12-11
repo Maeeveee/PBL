@@ -132,7 +132,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Form cari -->
                 <form method="GET" class="d-flex">
                         <input type="text" name="search" placeholder="Cari.." value="<?= htmlspecialchars($search) ?>" class="form-control me-2">
-                        <button type="submit" class="btn btn-primary">Cari</button>
+                        <button type="submit" class="btn purple-card-header text-white">Cari</button>
                 </form>
 
                 <!-- Tampil Mahasiswa -->
@@ -163,7 +163,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?= htmlspecialchars($mhs['Alamat']) ?></td>
                                         <td><?= htmlspecialchars($mhs['NoTelepon']) ?></td>
                                         <td><?= htmlspecialchars($mhs['Poin']) ?></td>
-                                        <td><a href="formSanksi.php" class="btn btn-primary">Detail</a></td>
+                                        <td><a href="formSanksi.php" class="btn purple-card-header text-white">Detail</a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
