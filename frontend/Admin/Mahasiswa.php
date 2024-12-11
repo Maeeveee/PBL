@@ -1,3 +1,45 @@
+<?php 
+session_start();
+include '../../backend/config_db.php';
+
+//user login sebagai admin
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+$username = $_SESSION['username'];
+try {
+    // Query untuk mendapatkan informasi admin berdasarkan username
+    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
+            FROM Admin A
+            INNER JOIN Users U ON A.AdminID = U.AdminID
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data admin tidak ditemukan
+    if (!$admin) {
+        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+
+// Ambil parameter pencarian jika ada
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Query pencarian data
+$sql = "SELECT * FROM mahasiswa WHERE Nama LIKE :search";
+$stmt = $conn->prepare($sql);
+$stmt->execute(['search' => "%$search%"]);
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,6 +51,7 @@
     <link rel="stylesheet" href="/myWeb/PBL/frontend/style/style.css">
     <title>PolinemaTertib</title>
 </head>
+
 
 <body style="background-color: #483D8B;">
     <div class="container-fluid">
@@ -81,49 +124,53 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Mahasiswa</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
 
                 <!-- Form cari -->
-                <div class="p-3 content-placeholder">
-                    <input type="text" placeholder="Cari.." class=" form-control" style="width: 25%;">
-                </div>
+                <form method="GET" class="d-flex">
+                        <input type="text" name="search" placeholder="Cari.." value="<?= htmlspecialchars($search) ?>" class="form-control me-2">
+                        <button type="submit" class="btn btn-primary">Cari</button>
+                </form>
 
                 <!-- Tampil Mahasiswa -->
-                <div class="p-3 content-placeholder">
-                    <table class="table">
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-striped table-hover text-white">
                         <thead>
                             <tr>
-                                <th class="purple-text-stay">Nama</th>
-                                <th class="purple-text-stay">NIM</th>
-                                <th class="purple-text">Tanggal Lahir</th>
-                                <th class="purple-text">Nama Wali</th>
-                                <th class="purple-text">Kota Asal</th>
-                                <th class="purple-text">Kontak</th>
-                                <th class="purple-text">Kelas</th>
-                                <th class="purple-text-stay">Status</th>
+                                <th>Nama</th>
+                                <th>NIM</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Email</th>
+                                <th>Nama Wali</th>
+                                <th>Kota Asal</th>
+                                <th>Kontak</th>
+                                <th>Poin</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body" style="line-height: 2.5;">
-                            <script>
-                                for (let index = 0; index < 15; index++) {
-                                    let tableData = `<tr class="align-middle">
-                                        <td>Rizal</td>
-                                        <td>12345678</td>
-                                        <td class="low-pixel-hide">01-01-2000</td>
-                                        <td class="low-pixel-hide">King</td>
-                                        <td class="low-pixel-hide">Surabaya</td>
-                                        <td class="low-pixel-hide">08123456789</td>
-                                        <td class="low-pixel-hide">TI-2F</td>
-                                        <td>
-                                            <a href="formSanksi.php"><button class="btn purple-card-header text-white">Detail</button></a>
-                                        </td>
-                                    </tr>`;
-                                    document.getElementById("table-body").innerHTML += tableData;
-                                }
-                            </script>
+                        <tbody>
+                            <?php if (count($data) > 0): ?>
+                                <?php foreach ($data as $mhs): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($mhs['Nama']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['NIM']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['TanggalLahir']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['Email']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['NamaWali']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['Alamat']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['NoTelepon']) ?></td>
+                                        <td><?= htmlspecialchars($mhs['Poin']) ?></td>
+                                        <td><a href="formSanksi.php" class="btn btn-primary">Detail</a></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="8" class="text-center">Data tidak ditemukan</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
