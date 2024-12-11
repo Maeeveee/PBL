@@ -31,9 +31,9 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
-                            <a href="Mahasiswa.php" class="align-middle">
-                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-white">
-                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Mahasiswa</strong></span>
+                            <a href="Mahasiswa.php" class="align-middle bg-white">
+                                <img src="/myWeb/PBL/frontend/img/reading.svg" alt="" class="img-purple">
+                                <span class="ms-1 d-none d-sm-inline purple-text"><strong>Mahasiswa</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
@@ -49,9 +49,9 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
-                            <a href="Pelanggaran.php" class="align-middle bg-white">
-                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="img-purple">
-                                <span class="ms-1 d-none d-sm-inline purple-text"><strong>Pelanggaran</strong></span>
+                            <a href="Pelanggaran.php" class="align-middle">
+                                <img src="/myWeb/PBL/frontend/img/illegal.svg" alt="" class="img-white">
+                                <span class="ms-1 d-none d-sm-inline white-text"><strong>Pelanggaran</strong></span>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center list-space">
