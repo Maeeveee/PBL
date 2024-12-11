@@ -118,17 +118,19 @@ if (!$mahasiswa) {
                 <!-- Profile Section -->
                 <div class="p-3 bg-white rounded d-flex flex-column content-placeholder content-placeholder-mid">
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="Profile Picture" class="profile-pict">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
                         <div class="p-3 purple-text-stay">
                             <h5><?php echo htmlspecialchars($mahasiswa['Nama']); ?></h5>
-                            <p>Mahasiswa</p>
+                            <p class="text-secondary">Mahasiswa</p>
+                            
                         </div>
-                        <div>
-                            <p class="purple-text">HP: <?php echo htmlspecialchars($mahasiswa['NoTelepon']); ?></p>
-                        </div>
-                        <div>
-                            <p class="purple-text">Email: <?php echo htmlspecialchars($mahasiswa['Email']); ?></p>
-                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between p-3">
+                        <span><h5 class="text-secondary">NIM: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
+                        <span><h5 class="text-secondary">Tanggal Lahir: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
+                        <span><h5 class="text-secondary">Alamat: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
+                        <span><h5 class="text-secondary">HP: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['NoTelepon']); ?></p></span>
+                        <span><h5 class="text-secondary">Email: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['Email']); ?></p></span>
                     </div>
                 </div>
             </div>
