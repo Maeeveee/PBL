@@ -1,6 +1,6 @@
-create database tatiba;
+create database tatib;
 
-use tatiba;
+use tatib;
 
 CREATE TABLE ProgramStudi (
 	ProdiID INT PRIMARY KEY NOT NULL,
@@ -14,8 +14,6 @@ CREATE TABLE Mahasiswa (
     NoTelepon VARCHAR(15),
     Alamat VARCHAR(255),
     TanggalLahir DATE,
-    NamaWali VARCHAR(255),
-    Poin INT DEFAULT 0,
 	ProdiID INT FOREIGN KEY REFERENCES ProgramStudi(ProdiID),
 );
 
@@ -31,6 +29,14 @@ CREATE TABLE Admin (
     NamaAdmin VARCHAR(100) NOT NULL,
     EmailAdmin VARCHAR(100) UNIQUE NOT NULL,
     NoTelepon VARCHAR(15),
+);
+
+CREATE TABLE Konfirmasi (
+    KonfirmasiID INT PRIMARY KEY IDENTITY(1,1),
+    BuktiPenyelesaian VARCHAR(255),
+    TanggalPelaksanaan DATE,
+    NIM CHAR(12) FOREIGN KEY REFERENCES Mahasiswa(NIM),
+    AdminID INT FOREIGN KEY REFERENCES Admin(AdminID),
 );
 
 CREATE TABLE Users (
@@ -49,14 +55,13 @@ CREATE TABLE Users (
 CREATE TABLE JenisPelanggaran (
     JenisID INT PRIMARY KEY IDENTITY(1,1),
     NamaPelanggaran VARCHAR(MAX),
-    Tingkat CHAR(3)
+    Tingkat CHAR(3),
+    Poin INT
 );
 
 CREATE TABLE Tugas (
     TugasID INT PRIMARY KEY IDENTITY(1,1),
     Deskripsi VARCHAR(255),
-	TanggalDibuat DATE,
-    TanggalSelesai DATE,
 	NIDN CHAR(10),
 	FOREIGN KEY (NIDN) REFERENCES Dosen(NIDN) ON DELETE CASCADE,
 );
@@ -69,7 +74,6 @@ CREATE TABLE Pelanggaran (
     TanggalPelanggaran DATE NOT NULL,
     TempatPelanggaran VARCHAR(255) NOT NULL,
     BuktiFoto VARCHAR(255),
-    DeskripsiPelanggaran VARCHAR(255),
 	Surat VARCHAR(255),
 	Status VARCHAR(20) DEFAULT 'Pending',
 	AdminID INT,
@@ -134,46 +138,6 @@ BEGIN
     INNER JOIN INSERTED I ON U.UsersID = I.UsersID;
 END;
 
-CREATE TRIGGER SetAdminID
-ON PolinemaToday
-INSTEAD OF INSERT
-AS
-BEGIN
-    DECLARE @AdminID INT;
-    -- Dapatkan AdminID berdasarkan sesi atau pengguna yang sedang login
-    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
-
-    -- Masukkan data dengan AdminID yang terisi otomatis
-    INSERT INTO PolinemaToday (Judul, Isi, TglDibuat, Thumbnail, AdminID)
-    SELECT Judul, Isi, TglDibuat, Thumbnail, @AdminID
-    FROM INSERTED;
-END;
-
-CREATE TRIGGER after_update_pelanggaran_status
-ON Pelanggaran
-AFTER UPDATE
-AS
-BEGIN
-    DECLARE @Status VARCHAR(20);
-    DECLARE @PelanggaranID INT;
-    DECLARE @AdminID INT;
-
-    -- Ambil status dan pelanggaran ID dari baris yang baru diupdate
-    SELECT @Status = Status, @PelanggaranID = PelanggaranID
-    FROM INSERTED;
-
-    -- Ambil AdminID yang melakukan update dari Users
-    SET @AdminID = (SELECT AdminID FROM Users WHERE Username = SYSTEM_USER);
-
-    -- Jika status diubah menjadi 'Selesai', lakukan tindakan tambahan
-    IF @Status = 'Selesai'
-    BEGIN
-        -- Mengirim notifikasi dengan AdminID yang sesuai
-        INSERT INTO Notifikasi (Judul, Isi, UsersID, AdminID)
-        VALUES ('Pelanggaran Selesai', 'Pelanggaran mahasiswa telah selesai diproses.', NULL, @AdminID);
-    END;
-END;
-
 CREATE TRIGGER after_insert_pelanggaran
 ON Pelanggaran
 AFTER INSERT
@@ -214,10 +178,10 @@ INSERT INTO ProgramStudi (ProdiID, Prodi) VALUES
 (2, 'D-IV Sistem Informasi Bisnis'),
 (3, 'D-II PPLS');
 
-INSERT INTO Mahasiswa (NIM, Nama, Email, NoTelepon, Alamat, TanggalLahir, NamaWali, Poin, ProdiID) VALUES
-('210123456789', 'Ahmad Rizky', 'ahmadrizky@email.com', '081234567890', 'Malang', '2000-01-01', 'Wali Ahmad', 100, 1),
-('210123456790', 'Budi Santoso', 'budi@email.com', '081234567891', 'Surabaya', '2000-02-01', 'Wali Budi', 80, 2),
-('210123456791', 'Citra Dewi', 'citra@email.com', '081234567892', 'Kediri', '2000-03-01', 'Wali Citra', 90, 3);
+INSERT INTO Mahasiswa (NIM, Nama, Email, NoTelepon, Alamat, TanggalLahir, ProdiID) VALUES
+('210123456789', 'Ahmad Rizky', 'ahmadrizky@email.com', '081234567890', 'Malang', '2000-01-01', 1),
+('210123456790', 'Budi Santoso', 'budi@email.com', '081234567891', 'Surabaya', '2000-02-01', 2),
+('210123456791', 'Citra Dewi', 'citra@email.com', '081234567892', 'Kediri', '2000-03-01', 3);
   
 
 INSERT INTO Dosen (NIDN, Nama, Email, NoTelepon) VALUES
@@ -239,42 +203,42 @@ INSERT INTO Users (Username, Password, Role, NIM, NIDN, AdminID) VALUES
 (NULL, 'adminpass', 'Admin', NULL, NULL, 1234), 
 (NULL, 'adminpass', 'Admin', NULL, NULL, 6789);
 
-INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat) VALUES
-('Berkomunikasi dengan tidak sopan, baik tertulis atau tidak tertulis kepada mahasiswa, dosen, karyawan, atau orang lain', 'V'),
-('Berbusana tidak sopan dan tidak rapi. Yaitu antara lain adalah: berpakaian ketat, transparan, memakai t-shirt (baju kaos tidak berkerah), tank top, hipster, you can see, rok mini, backless, celana pendek, celana tiga per empat, legging, model celana atau baju koyak, sandal, sepatu sandal di lingkungan kampus', 'IV'),
-('Mahasiswa laki-laki berambut tidak rapi, gondrong yaitu panjang rambutnya melewati batas alis mata di bagian depan, telinga di bagian samping atau menyentuh kerah baju di bagian leher', 'IV'),
-('Mahasiswa berambut dengan model punk, dicat selain hitam dan/atau skinned.', 'IV'),
-('Makan, atau minum di dalam ruang kuliah/ laboratorium/ bengkel.', 'IV'),
-('Melanggar peraturan/ ketentuan yang berlaku di Polinema baik di Jurusan/ Program Studi', 'IV'),
-('Tidak menjaga kebersihan di seluruh area Polinema', 'III'),
-('Membuat kegaduhan yang mengganggu pelaksanaan perkuliahan atau praktikum yang sedang berlangsung.', 'III'),
-('Merokok di luar area kawasan merokok', 'III'),
-('Bermain kartu, game online di area kampus', 'III'),
-('Mengotori atau mencoret-coret meja, kursi, tembok, dan lain-lain di lingkungan Polinema', 'III'),
-('Bertingkah laku kasar atau tidak sopan kepada mahasiswa, dosen, dan/atau karyawan.', 'III'),
-('Merusak sarana dan prasarana yang ada di area Polinema', 'III'),
-('Tidak menjaga ketertiban dan keamanan di seluruh area Polinema (misalnya: parkir tidak pada tempatnya, konvoi selebrasi wisuda dll)', 'II'),
-('Melakukan pengotoran/ pengrusakan barang milik orang lain termasuk milik Politeknik Negeri Malang', 'II'),
-('Mengakses materi pornografi di kelas atau area kampus', 'II'),
-('Membawa dan/atau menggunakan senjata tajam dan/atau senjata api untuk hal kriminal', 'II'),
-('Melakukan perkelahian, serta membentuk geng/ kelompok yang bertujuan negatif.', 'II'),
-('Melakukan kegiatan politik praktis di dalam kampus', 'II'),
-('Melakukan tindakan kekerasan atau perkelahian di dalam kampus.', 'II'),
-('Melakukan penyalahgunaan identitas untuk perbuatan negatif', 'II'),
-('Mengancam, baik tertulis atau tidak tertulis kepada mahasiswa, dosen, dan/atau karyawan.', 'II'),
-('Mencuri dalam bentuk apapun', 'II'),
-('Melakukan kecurangan dalam bidang akademik, administratif, dan keuangan.', 'II'),
-('Melakukan pemerasan dan/atau penipuan', 'II'),
-('Melakukan pelecehan dan/atau tindakan asusila dalam segala bentuk di dalam dan di luar kampus', 'II'),
-('Berjudi, mengkonsumsi minum-minuman keras, dan/ atau bermabuk-mabukan di lingkungan dan di luar lingkungan Kampus Polinema', 'II'),
-('Mengikuti organisasi dan atau menyebarkan faham-faham yang dilarang oleh Pemerintah.', 'II'),
-('Melakukan pemalsuan data / dokumen / tanda tangan.', 'II'),
-('Melakukan plagiasi (copy paste) dalam tugas-tugas atau karya ilmiah', 'II'),
-('Tidak menjaga nama baik Polinema di masyarakat dan/ atau mencemarkan nama baik Polinema melalui media apapun', 'I'),
-('Melakukan kegiatan atau sejenisnya yang dapat menurunkan kehormatan atau martabat Negara, Bangsa dan Polinema.', 'I'),
-('Menggunakan barang-barang psikotropika dan/ atau zat-zat Adiktif lainnya', 'I'),
-('Mengedarkan serta menjual barang-barang psikotropika dan/ atau zat-zat Adiktif lainnya', 'I'),
-('Terlibat dalam tindakan kriminal dan dinyatakan bersalah oleh Pengadilan', 'I');
+INSERT INTO JenisPelanggaran (NamaPelanggaran, Tingkat, Poin) VALUES
+('Berkomunikasi dengan tidak sopan, baik tertulis atau tidak tertulis kepada mahasiswa, dosen, karyawan, atau orang lain', 'V', 3),
+('Berbusana tidak sopan dan tidak rapi. Yaitu antara lain adalah: berpakaian ketat, transparan, memakai t-shirt (baju kaos tidak berkerah), tank top, hipster, you can see, rok mini, backless, celana pendek, celana tiga per empat, legging, model celana atau baju koyak, sandal, sepatu sandal di lingkungan kampus', 'IV', 6),
+('Mahasiswa laki-laki berambut tidak rapi, gondrong yaitu panjang rambutnya melewati batas alis mata di bagian depan, telinga di bagian samping atau menyentuh kerah baju di bagian leher', 'IV', 6),
+('Mahasiswa berambut dengan model punk, dicat selain hitam dan/atau skinned.', 'IV', 6),
+('Makan, atau minum di dalam ruang kuliah/ laboratorium/ bengkel.', 'IV', 6),
+('Melanggar peraturan/ ketentuan yang berlaku di Polinema baik di Jurusan/ Program Studi', 'IV', 6),
+('Tidak menjaga kebersihan di seluruh area Polinema', 'III', 12),
+('Membuat kegaduhan yang mengganggu pelaksanaan perkuliahan atau praktikum yang sedang berlangsung.', 'III', 12),
+('Merokok di luar area kawasan merokok', 'III', 12),
+('Bermain kartu, game online di area kampus', 'III', 12),
+('Mengotori atau mencoret-coret meja, kursi, tembok, dan lain-lain di lingkungan Polinema', 'III', 12),
+('Bertingkah laku kasar atau tidak sopan kepada mahasiswa, dosen, dan/atau karyawan.', 'III', 12),
+('Merusak sarana dan prasarana yang ada di area Polinema', 'III', 12),
+('Tidak menjaga ketertiban dan keamanan di seluruh area Polinema (misalnya: parkir tidak pada tempatnya, konvoi selebrasi wisuda dll)', 'II', 24),
+('Melakukan pengotoran/ pengrusakan barang milik orang lain termasuk milik Politeknik Negeri Malang', 'II', 24),
+('Mengakses materi pornografi di kelas atau area kampus', 'II', 24),
+('Membawa dan/atau menggunakan senjata tajam dan/atau senjata api untuk hal kriminal', 'II', 24),
+('Melakukan perkelahian, serta membentuk geng/ kelompok yang bertujuan negatif.', 'II', 24),
+('Melakukan kegiatan politik praktis di dalam kampus', 'II', 24),
+('Melakukan tindakan kekerasan atau perkelahian di dalam kampus.', 'II', 24),
+('Melakukan penyalahgunaan identitas untuk perbuatan negatif', 'II', 24),
+('Mengancam, baik tertulis atau tidak tertulis kepada mahasiswa, dosen, dan/atau karyawan.', 'II', 24),
+('Mencuri dalam bentuk apapun', 'II', 24),
+('Melakukan kecurangan dalam bidang akademik, administratif, dan keuangan.', 'II', 24),
+('Melakukan pemerasan dan/atau penipuan', 'II', 24),
+('Melakukan pelecehan dan/atau tindakan asusila dalam segala bentuk di dalam dan di luar kampus', 'II', 24),
+('Berjudi, mengkonsumsi minum-minuman keras, dan/ atau bermabuk-mabukan di lingkungan dan di luar lingkungan Kampus Polinema', 'II', 24),
+('Mengikuti organisasi dan atau menyebarkan faham-faham yang dilarang oleh Pemerintah.', 'II', 24),
+('Melakukan pemalsuan data / dokumen / tanda tangan.', 'II', 24),
+('Melakukan plagiasi (copy paste) dalam tugas-tugas atau karya ilmiah', 'II', 24),
+('Tidak menjaga nama baik Polinema di masyarakat dan/ atau mencemarkan nama baik Polinema melalui media apapun', 'I', 48),
+('Melakukan kegiatan atau sejenisnya yang dapat menurunkan kehormatan atau martabat Negara, Bangsa dan Polinema.', 'I',48),
+('Menggunakan barang-barang psikotropika dan/ atau zat-zat Adiktif lainnya', 'I', 48),
+('Mengedarkan serta menjual barang-barang psikotropika dan/ atau zat-zat Adiktif lainnya', 'I', 48),
+('Terlibat dalam tindakan kriminal dan dinyatakan bersalah oleh Pengadilan', 'I', 48);
 
 
 -- Menambahkan riwayat pendidikan
