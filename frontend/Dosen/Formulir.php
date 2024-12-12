@@ -243,22 +243,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="nim">NIM</label>
-                                        <input type="text" class="form-control" id="nim" name="nim" placeholder="Masukkan NIM" required>
+                                    <div class="form-group d-flex gap-3">
+                                        <div>
+                                            <label for="poin">Poin</label>
+                                            <input type="text" name="poin" id="poin" placeholder="10" class="form-control">
+                                        </div>
+                                        <div>
+                                            <label for="tingkat">Tingkat</label>
+                                            <input type="text" name="tingkat" id="tingkat" placeholder="3" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email" placeholder="masukkan email anda" class="form-control">
+                                        <label for="nim">NIM</label>
+                                        <input type="text" class="form-control" id="nim" name="nim" placeholder="Masukkan NIM mahasiswa" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="deskripsi">Deskripsi Pelanggaran</label>
-                                <textarea class="form-control" id="deskripsi" name="deskripsiPelanggaran" rows="10" placeholder="Deskripsikan pelanggaran yang terjadi..."></textarea>
+                                <label for="tugas">Tugas Yang Diberikan</label>
+                                <textarea class="form-control" id="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
                             </div>
                             <button type="submit" class="btn text-white purple-card-header">Kirim Bukti</button>
                         </div>

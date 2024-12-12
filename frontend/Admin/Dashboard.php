@@ -130,7 +130,7 @@ try {
             </div>
 
             <!-- Main Content -->
-            <div class="col-12 offset-md-3 offset-xl-2 main-content">
+            <div class="col-12 main-content">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Beranda</strong></h1>
                     <div class="d-flex flex-column purple-text">
@@ -159,88 +159,8 @@ try {
                     </div>
                 </div>
 
-                <!-- Kalender -->
-                <div class="d-flex justify-content-center middle-gap">
-                    <!-- Kalender -->
-                    <div class="bg-white p-3 rounded content-placeholder">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="purple-text"><strong>Kalender</strong></h4>
-                            <div class="d-flex align-items-center gap-3">
-                                <h4 style="color: #483D8B;"><strong>December 2024</strong></h4>
-                            </div>
-                        </div>
-
-                        <div class="container mt-5">
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Sun</th>
-                                                <th>Mon</th>
-                                                <th>Tue</th>
-                                                <th>Wed</th>
-                                                <th>Thu</th>
-                                                <th>Fri</th>
-                                                <th>Sat</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-secondary">31</td>
-                                                <td>1</td>
-                                                <td>2</td>
-                                                <td>3</td>
-                                                <td>4</td>
-                                                <td>5</td>
-                                                <td>6</td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td class="bg-primary text-white">8</td>
-                                                <td>9</td>
-                                                <td>10</td>
-                                                <td>11</td>
-                                                <td>12</td>
-                                                <td>13</td>
-                                            </tr>
-                                            <tr>
-                                                <td>14</td>
-                                                <td>15</td>
-                                                <td>16</td>
-                                                <td class="bg-danger text-white">17</td>
-                                                <td>18</td>
-                                                <td>19</td>
-                                                <td>20</td>
-                                            </tr>
-                                            <tr>
-                                                <td>21</td>
-                                                <td>22</td>
-                                                <td>23</td>
-                                                <td>24</td>
-                                                <td>25</td>
-                                                <td>26</td>
-                                                <td class="bg-warning text-white">27</td>
-                                            </tr>
-                                            <tr>
-                                                <td>28</td>
-                                                <td>29</td>
-                                                <td>30</td>
-                                                <td class="text-secondary">1</td>
-                                                <td class="text-secondary">2</td>
-                                                <td class="text-secondary">3</td>
-                                                <td class="text-secondary">4</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Leaderboard Pelanggar -->
-                <div class="bg-white p-3 rounded purple-text-stay content-placeholder">
+                <div class="bg-white p-3 rounded purple-text-stay content-placeholder mt-3">
                     <h4 style="color: #483D8B;"><strong>Top 5 Pelanggar</strong></h4>
                     <?php foreach ($leaderboardData as $row): ?>
                         <div class="p-3 d-flex justify-content-between align-items-center">
