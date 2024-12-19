@@ -34,15 +34,11 @@ try {
 // Periksa apakah form dikirim
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    
-
-
     $namaLengkap = $_POST['namaLengkap'];
     $tanggalPelanggaran = $_POST['tanggalPelanggaran'];
     $jenisPelanggaran = $_POST['jenisPelanggaran'];  // ID jenis pelanggaran yang dipilih
     $nidn = $dosen['NIDN']; // Gunakan NIDN yang diambil dari database
     $nim = $_POST['nim']; // Anggap ada input untuk NIM
-    $deskripsiPelanggaran = $_POST['deskripsiPelanggaran'];
     $tempatPelanggaran = $_POST['tempatPelanggaran'];
 
     // Cek surat jika ada, beri nilai null jika tidak ada
@@ -56,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Proses upload file
     $buktiFoto = null;
     if (isset($_FILES['buktiFoto']) && $_FILES['buktiFoto']['error'] == 0) {
-        $targetDir = "D:/FilePelanggaran/"; // Path yang lebih aman untuk upload
+        $targetDir = "C:/laragon/www/myWeb/PBL/upload/FilePelanggaran/"; // Path folder lokal untuk upload
         $buktiFoto = basename($_FILES['buktiFoto']['name']); // Ambil nama file
         $targetFile = $targetDir . $buktiFoto; // Gabungkan path dan nama file
 
@@ -67,36 +63,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+
+    // Proses tugas yang diberikan
+    $tugas = null;
+    if (isset($_POST['tugas'])) {
+        $tugas = $_POST['tugas'];
+    }
+
     try {
         // Insert langsung ke tabel Pelanggaran
         $query = "INSERT INTO Pelanggaran (
-            NIM, NIDN, JenisID, TanggalPelanggaran, BuktiFoto, Surat, Status, AdminID, TugasID, TempatPelanggaran, DeskripsiPelanggaran
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+            NIM, NIDN, JenisID, TanggalPelanggaran, TempatPelanggaran, BuktiFoto, Surat, Status, AdminID, TugasID
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         $stmt = $conn->prepare($query);
         $stmt->execute([
             $nim,
             $nidn,
             $jenisPelanggaran,
             $tanggalPelanggaran,
+            $tempatPelanggaran,
             $buktiFoto, // Simpan hanya nama file di database
             $surat,
             'Pending',
             $adminID,
-            $tugasID,
-            $tempatPelanggaran,
-            $deskripsiPelanggaran 
+            $tugasID
         ]);
     } catch (PDOException $e) {
         die("Database error: " . $e->getMessage());
     }
+
+    if (isset($_GET['JenisID'])) {
+        $JenisID = $_GET['JenisID'];
+    
+        try {
+            $sql = "SELECT Tingkat, Poin FROM JenisPelanggaran WHERE JenisID = :JenisID";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':JenisID', $JenisID, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            echo json_encode($result);
+        } catch (PDOException $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
 }
 ?>
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,8 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/myWeb/PBL/frontend/style/style.css">
     <title>PolinemaTertib</title>
 </head>
@@ -185,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="card-header text-white purple-card-header">
                             <h5 class="mb-0 ">Bukti Melakukan Pelanggaran</h5>
                         </div>
-                        <div class=" card-body">
+                        <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -196,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="namaLengkap">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" placeholder="Samantha">
+                                        <input type="text" class="form-control" id="namaLengkap" name="namaLengkap" placeholder="Samantha" required>
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="input-group gap-2">
                                             <input type="date" name="tanggalPelanggaran" required>
                                             <div class="input-group-append">
-                                                <input type="text" class="form-control" name="tempatPelanggaran" placeholder="LSI 1">
+                                                <input type="text" class="form-control" name="tempatPelanggaran" placeholder="LSI 1" required>
                                             </div>
                                         </div>
                                     </div>
@@ -219,19 +232,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <select class="form-control" id="jenisPelanggaran" name="jenisPelanggaran" required>
                                             <option value="">Pilih Jenis Pelanggaran</option>
                                             <?php
-                                            // Koneksi ke database dan ambil data jenis pelanggaran
                                             include '../../backend/config_db.php';
 
                                             try {
                                                 // Query untuk mengambil data jenis pelanggaran
-                                                $sql = "SELECT JenisID, NamaPelanggaran FROM JenisPelanggaran";
+                                                $sql = "SELECT JenisID, NamaPelanggaran, Tingkat, Poin FROM JenisPelanggaran";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $jenisPelanggaran = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                 // Loop untuk menampilkan pilihan jenis pelanggaran
                                                 foreach ($jenisPelanggaran as $jenis) {
-                                                    echo "<option value='" . $jenis['JenisID'] . "'>" . $jenis['NamaPelanggaran'] . "</option>";
+                                                    echo "<option value='" . $jenis['JenisID'] . "' data-tingkat='" . $jenis['Tingkat'] . "' data-poin='" . $jenis['Poin'] . "'>" . $jenis['NamaPelanggaran'] . "</option>";
                                                 }
                                             } catch (PDOException $e) {
                                                 echo "Error: " . $e->getMessage();
@@ -240,20 +252,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </select>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group d-flex gap-3">
                                         <div>
                                             <label for="poin">Poin</label>
-                                            <input type="text" name="poin" id="poin" placeholder="10" class="form-control">
+                                            <input type="text" name="poin" id="poin" placeholder="6" class="form-control" readonly>
                                         </div>
                                         <div>
                                             <label for="tingkat">Tingkat</label>
-                                            <input type="text" name="tingkat" id="tingkat" placeholder="3" class="form-control">
+                                            <input type="text" name="tingkat" id="tingkat" placeholder="II" class="form-control" readonly>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -264,17 +278,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="form-group mb-3">
                                 <label for="tugas">Tugas Yang Diberikan</label>
-                                <textarea class="form-control" id="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
+                                <textarea class="form-control" id="tugas" name="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
                             </div>
                             <button type="submit" class="btn text-white purple-card-header">Kirim Bukti</button>
                         </div>
                     </div>
                 </div>
             </form>
-
-
         </div>
     </div>
+    <script>
+        document.getElementById('jenisPelanggaran').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const poin = selectedOption.getAttribute('data-poin') || '';
+            const tingkat = selectedOption.getAttribute('data-tingkat') || '';
+
+            document.getElementById('poin').value = poin;
+            document.getElementById('tingkat').value = tingkat;
+        });
+    </script>
+
 </body>
 
 </html>

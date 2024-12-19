@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username']; // NIM from session
 
 // Query to get student information based on NIM
-$query = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, p.Prodi
+$query = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, m.Alamat, m.TanggalLahir, p.Prodi
           FROM Mahasiswa m
           INNER JOIN ProgramStudi p ON m.ProdiID = p.ProdiID
           WHERE m.NIM = :username"; // Assuming session stores NIM
@@ -25,9 +25,12 @@ $mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
 // If no student data found, use default placeholder data
 if (!$mahasiswa) {
     $mahasiswa = [
+        'NIM' => 'Data tidak tersedia',
         'Nama' => 'Data tidak tersedia', 
         'Email' => 'Data tidak tersedia', 
-        'NoTelepon' => 'Data tidak tersedia', 
+        'NoTelepon' => 'Data tidak tersedia',
+        'Alamat' => 'Data tidak tersedia',
+        'TanggalLahir' => 'Data tidak tersedia', 
         'Prodi' => 'Data tidak tersedia'
     ];
 }
@@ -126,9 +129,9 @@ if (!$mahasiswa) {
                         </div>
                     </div>
                     <div class="d-flex justify-content-between p-3">
-                        <span><h5 class="text-secondary">NIM: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
-                        <span><h5 class="text-secondary">Tanggal Lahir: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
-                        <span><h5 class="text-secondary">Alamat: </h5> <p class="purple-text"><!-- Dipanggil Disini ya guys -->tes</p></span>
+                        <span><h5 class="text-secondary">NIM: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['NIM']); ?></h5></p></span>
+                        <span><h5 class="text-secondary">Tanggal Lahir: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['TanggalLahir']); ?></h5></p></span>
+                        <span><h5 class="text-secondary">Alamat: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['Alamat']); ?></p></span>
                         <span><h5 class="text-secondary">HP: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['NoTelepon']); ?></p></span>
                         <span><h5 class="text-secondary">Email: </h5> <p class="purple-text"><?php echo htmlspecialchars($mahasiswa['Email']); ?></p></span>
                     </div>

@@ -170,7 +170,7 @@
 
         tingkatInput.addEventListener("input", function () {
         const value = parseInt(tingkatInput.value);
-        if (value >= 3 && value <= 5) {
+        if (value >= 1 && value <= 3) {
             kirim.disabled = false;
         } else {
             kirim.disabled = true;

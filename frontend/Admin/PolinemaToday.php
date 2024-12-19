@@ -1,3 +1,38 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+//user login sebagai admin
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi admin berdasarkan username
+    $sql = "SELECT A.AdminID, A.NamaAdmin, A.EmailAdmin, A.NoTelepon
+            FROM Admin A
+            INNER JOIN Users U ON A.AdminID = U.AdminID
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data admin tidak ditemukan
+    if (!$admin) {
+        $admin = ['NamaAdmin' => 'Data tidak tersedia', 'EmailAdmin' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,7 +116,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>PolinemaToday</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Admin</h5>
+                        <h5><?php echo htmlspecialchars($admin['NamaAdmin']); ?></h5>
                         <p>Admin</p>
                     </div>
                 </div>
@@ -90,13 +125,14 @@
                     <div id="tampilBerita"></div>
                     <div>
                         <script>
+                          let days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
                             for (let index = 0; index < 7; index++) {
                                 let berita = `
                                     <div class="p-3 d-flex align-items-center gap-3">
                                         <img src="/myWeb/PBL/frontend/img/news.svg" alt="" class="img-thumbnail" style="height: 100px; width: 100px;">
                                         <div>
-                                            <a href="ViewPolinemaToday.php" style="text-decoration: none;"><p style="color: #cbc6eb;"><strong>Minggu</strong></p>
-                                            <h5 style="color: #483D8B;"><strong>Pembaruan fasilitas kampus</strong></h5></a>                       
+                                            <a href="ViewPolinemaToday.php" style="text-decoration: none;"><p style="color: #cbc6eb;"><strong>${days[index]}</strong></p>
+                                            <h5 style="color: #483D8B;"><strong>Pembaruan fasilitas kampus</strong></h5></a>                          
                                         </div>
                                     </div>
                                     `;

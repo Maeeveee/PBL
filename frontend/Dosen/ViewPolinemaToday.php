@@ -1,3 +1,38 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+//user login sebagai dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+try {
+    // Query untuk mendapatkan informasi dosen berdasarkan username
+    $sql = "SELECT A.NIDN, A.Nama, A.Email, A.NoTelepon
+            FROM Dosen A
+            INNER JOIN Users U ON A.NIDN = U.NIDN
+            WHERE U.Username = :username";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Ambil hasil query
+    $dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Jika data dosen tidak ditemukan
+    if (!$dosen) {
+        $dosen = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia'];
+    }
+
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,7 +110,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>PolinemaToday</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Dosen</h5>
+                        <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                         <p>Dosen</p>
                     </div>
                 </div>
@@ -86,7 +121,6 @@
                         <div class="d-flex flex-column">
                             <h5 class="purple-text-stay">Judul Berita</h5>
                             <p class="text-secondary">tanggal</p>
-                            <p class="text-secondary">deskripsi berita disini</p>
                         </div>
                     </div>
                     <div class="d-flex p-3 gap-3 flex-column">

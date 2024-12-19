@@ -1,3 +1,33 @@
+<?php
+session_start();
+include '../../backend/config_db.php';
+
+//user login as dosen
+if (!isset($_SESSION['username'])) {
+    header('Location: ./login.php');
+    exit();
+}
+
+$username = $_SESSION['username'];
+
+// Query to get student information based on NIM or Username
+$query = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, p.Prodi
+          FROM Mahasiswa m
+          INNER JOIN ProgramStudi p ON m.ProdiID = p.ProdiID
+          WHERE m.NIM = :username"; // Assuming session stores NIM
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+$stmt->execute();
+
+// Fetch result
+$mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// If no student data found, use default placeholder data
+if (!$mahasiswa) {
+    $mahasiswa = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia', 'Prodi' => 'Data tidak tersedia'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,8 +105,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>PolinemaToday</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5>Nama Mahasiswa</h5>
-                        <p>Mahasiswa</p>
+                        <h5><?php echo $mahasiswa['Nama']; ?></h5>
+                        <p><?php echo $mahasiswa['Prodi']; ?></p>
                     </div>
                 </div>
 
@@ -86,7 +116,6 @@
                         <div class="d-flex flex-column">
                             <h5 class="purple-text-stay">Judul Berita</h5>
                             <p class="text-secondary">tanggal</p>
-                            <p class="text-secondary">deskripsi berita disini</p>
                         </div>
                     </div>
                     <div class="d-flex p-3 gap-3 flex-column">

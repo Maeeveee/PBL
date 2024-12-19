@@ -2,7 +2,7 @@
 session_start();
 include '../../backend/config_db.php';
 
-//user login as dosen
+// Check if user is logged in
 if (!isset($_SESSION['username'])) {
     header('Location: ./login.php');
     exit();
@@ -14,7 +14,7 @@ $username = $_SESSION['username'];
 $query = "SELECT m.NIM, m.Nama, m.Email, m.NoTelepon, p.Prodi
           FROM Mahasiswa m
           INNER JOIN ProgramStudi p ON m.ProdiID = p.ProdiID
-          WHERE m.NIM = :username"; // Assuming session stores NIM
+          WHERE m.NIM = :username";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
 $stmt->execute();
@@ -25,6 +25,71 @@ $mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
 // If no student data found, use default placeholder data
 if (!$mahasiswa) {
     $mahasiswa = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia', 'Prodi' => 'Data tidak tersedia'];
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate and process form data
+    $nim = $_POST['nim'] ?? '';
+    $tanggalPelanggaran = $_POST['tanggalPelanggaran'] ?? '';
+    
+    // File upload handling
+    $buktiFoto = '';
+    if (isset($_FILES['buktiFoto']) && $_FILES['buktiFoto']['error'] == 0) {
+        $uploadDir = '../../uploads/bukti_penyelesaian/';
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        // Generate unique filename
+        $fileExtension = pathinfo($_FILES['buktiFoto']['name'], PATHINFO_EXTENSION);
+        $buktiFoto = $uploadDir . uniqid() . '_' . $nim . '.' . $fileExtension;
+        
+        // Move uploaded file
+        if (move_uploaded_file($_FILES['buktiFoto']['tmp_name'], $buktiFoto)) {
+            // File uploaded successfully
+            $buktiFoto = str_replace('../../', '', $buktiFoto); // Store relative path
+        } else {
+            // Handle upload error
+            $error = "Gagal mengunggah file.";
+        }
+    }
+    
+    // Get AdminID (you might need to modify this based on your authentication system)
+    try {
+        $adminQuery = "SELECT TOP 1 AdminID FROM Admin";
+        $adminStmt = $conn->prepare($adminQuery);
+        $adminStmt->execute();
+        $admin = $adminStmt->fetch(PDO::FETCH_ASSOC);
+        $adminID = $admin ? $admin['AdminID'] : null;
+    } catch(PDOException $e) {
+        // Log or handle the error
+        $error = "Gagal mengambil AdminID: " . $e->getMessage();
+        $adminID = null;
+    }
+    
+    // Prepare and execute insert query
+    try {
+        $insertQuery = "INSERT INTO Konfirmasi (BuktiPenyelesaian, TanggalPelaksanaan, NIM, AdminID) 
+                        VALUES (:buktiFoto, :tanggalPelanggaran, :nim, :adminID)";
+        $insertStmt = $conn->prepare($insertQuery);
+        $insertStmt->bindParam(':buktiFoto', $buktiFoto, PDO::PARAM_STR);
+        $insertStmt->bindParam(':tanggalPelanggaran', $tanggalPelanggaran, PDO::PARAM_STR);
+        $insertStmt->bindParam(':nim', $nim, PDO::PARAM_STR);
+        $insertStmt->bindParam(':adminID', $adminID, PDO::PARAM_INT);
+        
+        $insertStmt->execute();
+        
+        // Redirect with success message
+        $_SESSION['message'] = "Bukti penyelesaian berhasil dikirim.";
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    } catch(PDOException $e) {
+        // Handle database error
+        $error = "Gagal menyimpan data: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -101,88 +166,63 @@ if (!$mahasiswa) {
             </div>
 
             <!-- Main Content -->
-            <div  class="col-12 offset-md-3 offset-xl-2 main-content">
+            <div class="col-12 offset-md-3 offset-xl-2 main-content">
+                <?php 
+                // Display success or error messages
+                if (isset($_SESSION['message'])) {
+                    echo '<div class="alert alert-success">' . $_SESSION['message'] . '</div>';
+                    unset($_SESSION['message']);
+                }
+                if (isset($error)) {
+                    echo '<div class="alert alert-danger">' . $error . '</div>';
+                }
+                ?>
+
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="purple-text title-font"><strong>Form Sanksi</strong></h1>
                     <div class="d-flex flex-column purple-text">
-                        <h5><?php echo $mahasiswa['Nama']; ?></h5>
-                        <p><?php echo $mahasiswa['Prodi']; ?></p>
+                        <h5><?php echo htmlspecialchars($mahasiswa['Nama']); ?></h5>
+                        <p><?php echo htmlspecialchars($mahasiswa['Prodi']); ?></p>
                     </div>
                 </div>
 
                 <div class="card mb-4 shadow-sm content-placeholder">
                     <div class="card-header text-white purple-card-header">
-                        <h5 class="mb-0 ">Bukti Melakukan Pelanggaran</h5>
+                        <h5 class="mb-0 ">Bukti Penyelesaian Sanksi</h5>
                     </div>
-                    <div class=" card-body">
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="buktiFoto">Bukti Foto</label>
-                                        <input type="file" class="form-control-file" id="buktiFoto" accept="image/*">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="namaLengkap">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="namaLengkap" placeholder="Samantha">
+                                        <input type="file" name="buktiFoto" class="form-control-file" id="buktiFoto" accept="image/*" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="tanggalPelanggaran">Tanggal Pelanggaran & Tempat</label>
+                                        <label for="tanggalPelanggaran">Tanggal Penyelesaian</label>
                                         <div class="input-group gap-2">
-                                            <input type="text" class="form-control" id="tanggalPelanggaran" placeholder="24 November 2024">
-                                            <div class="input-group-append">
-                                                <input type="text" class="form-control" placeholder="LSI 1">
-                                            </div>
+                                            <input type="date" name="tanggalPelanggaran" class="form-control" id="tanggalPelanggaran" required>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group"> <label for="jenisPelanggaran">Jenis Pelanggaran</label>
-                                        <select class="form-control" id="jenisPelanggaran">
-                                            <option value="">Pilih Jenis Pelanggaran</option>
-                                            <option value="ringan">Pelanggaran Ringan</option>
-                                            <option value="sedang">Pelanggaran Sedang</option>
-                                            <option value="berat">Pelanggaran Berat</option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="form-group d-flex gap-3">
-                                        <div>
-                                            <label for="poin">Poin</label>
-                                            <input type="text" name="poin" id="poin" placeholder="10" class="form-control">
-                                        </div>
-                                        <div>
-                                            <label for="tingkat">Tingkat</label>
-                                            <input type="text" name="tingkat" id="tingkat" placeholder="3" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="nim">NIM</label>
-                                        <input type="text" name="nim" id="nim" placeholder="Masukkan NIM mahasiswa" class="form-control">
+                                        <input type="text" name="nim" id="nim" placeholder="Masukkan NIM mahasiswa" class="form-control" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="tugas">Tugas Yang Diberikan</label>
-                                <textarea class="form-control" id="tugas" rows="10" placeholder="Deskripsikan tugas yang diberikan..."></textarea>
-                            </div>
-                            <button type="submit" class="btn text-white purple-card-header">Terima</button>
-                            <button type="submit" class="btn text-white purple-card-header">Tolak</button>                            
-                        </div>
+                            <button type="submit" class="btn text-white purple-card-header">Kirim</button>                           
+                        </form>
+                    </div>
                 </div>
-             </div>
+            </div>
 
         </div>
     </div>

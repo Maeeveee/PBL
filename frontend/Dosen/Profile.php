@@ -133,7 +133,7 @@ try {
                     <img src="/myWeb/PBL/frontend/img/roundProfile.png" alt="" class="profile-pict">
                     <div class=" d-flex align-items-center justify-content-between">
                         <div class="p-3 purple-text-stay">
-                            <h5><Strong>Rizal Abrar</Strong></h5>
+                            <h5><?php echo htmlspecialchars($dosen['Nama']); ?></h5>
                             <p>Dosen</p>
                         </div>
                         <div>

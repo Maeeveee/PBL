@@ -144,10 +144,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <th>NIM</th>
                                 <th>Tanggal Lahir</th>
                                 <th>Email</th>
-                                <th>Nama Wali</th>
                                 <th>Kota Asal</th>
                                 <th>Kontak</th>
-                                <th>Poin</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -159,10 +157,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><?= htmlspecialchars($mhs['NIM']) ?></td>
                                         <td><?= htmlspecialchars($mhs['TanggalLahir']) ?></td>
                                         <td><?= htmlspecialchars($mhs['Email']) ?></td>
-                                        <td><?= htmlspecialchars($mhs['NamaWali']) ?></td>
                                         <td><?= htmlspecialchars($mhs['Alamat']) ?></td>
                                         <td><?= htmlspecialchars($mhs['NoTelepon']) ?></td>
-                                        <td><?= htmlspecialchars($mhs['Poin']) ?></td>
                                         <td><a href="formSanksi.php" class="btn purple-card-header text-white">Detail</a></td>
                                     </tr>
                                 <?php endforeach; ?>

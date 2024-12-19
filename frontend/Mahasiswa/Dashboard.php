@@ -27,14 +27,13 @@ if (!$mahasiswa) {
     $mahasiswa = ['Nama' => 'Data tidak tersedia', 'Email' => 'Data tidak tersedia', 'NoTelepon' => 'Data tidak tersedia', 'Prodi' => 'Data tidak tersedia'];
 }
 
-// Query to get violation history for the logged-in student
-$queryViolations = "SELECT p.PelanggaranID, jp.NamaPelanggaran, p.TanggalPelanggaran, p.TempatPelanggaran, p.DeskripsiPelanggaran
+$queryViolations = "SELECT p.PelanggaranID, jp.NamaPelanggaran, p.TanggalPelanggaran, p.TempatPelanggaran, p.Status, p.BuktiFoto
                     FROM Pelanggaran p
                     INNER JOIN JenisPelanggaran jp ON p.JenisID = jp.JenisID
                     WHERE p.NIM = :nim
-                    ORDER BY p.TanggalPelanggaran DESC"; // Order by date
+                    ORDER BY p.TanggalPelanggaran DESC";
 $stmtViolations = $conn->prepare($queryViolations);
-$stmtViolations->bindParam(':nim', $username, PDO::PARAM_STR);
+$stmtViolations->bindParam(':nim', $mahasiswa['NIM'], PDO::PARAM_STR); // Gunakan $mahasiswa['NIM'] bukan $user['NIM']
 $stmtViolations->execute();
 
 // Fetch results
@@ -128,41 +127,44 @@ $violations = $stmtViolations->fetchAll(PDO::FETCH_ASSOC);
                 <div class="bg-white p-3 rounded purple-text-stay content-placeholder mt-3">
                     <h4 style="color: #483D8B;"><strong>Riwayat Pelanggaran</strong></h4>
                     <div id="leaderboard">
-                        <?php if (count($violations) > 0): ?>
-                            <?php foreach ($violations as $violation): ?>
-                                <div class="p-2 d-flex justify-content-between align-items-center border-bottom">
-                                    <div class="d-flex align-items-center">
-                                        <?php
-                                        // Gunakan null coalescing operator untuk menghindari nilai null
-                                        $fotoPelanggaran = htmlspecialchars($violation['FotoPelanggaran'] ?? 'default.jpg'); // Gambar default jika null
-                                        $namaPelanggaran = htmlspecialchars($violation['NamaPelanggaran'] ?? 'Unknown');
-                                        $tanggalPelanggaran = htmlspecialchars($violation['TanggalPelanggaran'] ?? 'Unknown date');
-                                        $tempatPelanggaran = htmlspecialchars($violation['TempatPelanggaran'] ?? 'Unknown place');
+                    <?php if (count($violations) > 0): ?>
+                        <?php foreach ($violations as $violation): ?>
+                            <div class="p-2 d-flex justify-content-between align-items-center border-bottom">
+                                <div class="d-flex align-items-center">
+                                    <?php
+                                    $fotoPelanggaran = htmlspecialchars($violation['BuktiFoto'] ?? 'default.jpg');
+                                    $namaPelanggaran = htmlspecialchars($violation['NamaPelanggaran'] ?? 'Unknown');
+                                    $tanggalPelanggaran = htmlspecialchars($violation['TanggalPelanggaran'] ?? 'Unknown date');
+                                    $tempatPelanggaran = htmlspecialchars($violation['TempatPelanggaran'] ?? 'Unknown place');
 
-                                        // Path relatif untuk gambar
-                                        $imagePath = "/myWeb/PBL/upload/FilePelanggaran/$fotoPelanggaran";
+                                    // Definisikan path upload yang konsisten
+                                    $uploadDir = "C:\\laragon\\www\\myWeb\\PBL\\upload\\FilePelanggaran\\";
+                                    $imagePath = "/myWeb/PBL/upload/FilePelanggaran/" . $fotoPelanggaran;
+                                    $fullPath = $uploadDir . $fotoPelanggaran;
 
-                                        // Periksa apakah file ada di server
-                                        $fullPath = $_SERVER['DOCUMENT_ROOT'] . $imagePath;
-                                        if (!file_exists($fullPath)) {
-                                            $imagePath = "/myWeb/PBL/upload/FilePelanggaran/default.jpg"; // Gambar default
-                                        }
-                                        ?>
-                                        <a href="<?php echo $imagePath; ?>" target="_blank">
-                                            <img src="<?php echo $imagePath; ?>" alt="Bukti Foto" class="img-sidebar" style="width: 40px; height: 40px; cursor: pointer;">
-                                        </a>
-                                        <div class="ms-2">
-                                            <p class="mb-0"><strong><?php echo $namaPelanggaran; ?></strong></p>
-                                            <p class="mb-0 text-muted" style="font-size: 0.9em;"><?php echo $tanggalPelanggaran; ?></p>
-                                            <p class="mb-0" style="font-size: 0.9em;"><?php echo $tempatPelanggaran; ?></p>
-                                        </div>
+                                    // Periksa apakah file ada
+                                    if (!file_exists($fullPath)) {
+                                        $imagePath = "/myWeb/PBL/frontend/img/default.jpg"; // Fallback ke gambar default
+                                    }
+                                    ?>
+                                    <a href="<?php echo $imagePath; ?>" target="_blank">
+                                        <img src="<?php echo $imagePath; ?>" alt="Bukti Foto" 
+                                            class="img-sidebar" 
+                                            style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;">
+                                    </a>
+                                    <div class="ms-2">
+                                        <p class="mb-0"><strong><?php echo $namaPelanggaran; ?></strong></p>
+                                        <p class="mb-0 text-muted" style="font-size: 0.9em;"><?php echo $tanggalPelanggaran; ?></p>
+                                        <p class="mb-0" style="font-size: 0.9em;"><?php echo $tempatPelanggaran; ?></p>
                                     </div>
-                                    <a href="Formulir.php?id=<?php echo htmlspecialchars($violation['PelanggaranID'] ?? ''); ?>" class="btn btn-link" style="color: #483D8B; text-decoration: none;">Print</a>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Tidak ada riwayat pelanggaran.</p>
-                        <?php endif; ?>
+                                <a href="Formulir.php?id=<?php echo htmlspecialchars($violation['PelanggaranID'] ?? ''); ?>" 
+                                class="btn btn-link" style="color: #483D8B; text-decoration: none;">Print</a>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>Tidak ada riwayat pelanggaran.</p>
+                    <?php endif; ?>
                     </div>
                 </div>
             </div>
